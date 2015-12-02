@@ -18,6 +18,7 @@ set showmode                    "Show current mode down the bottom
 set gcr=a:blinkon0              "Disable cursor blink
 set visualbell                  "No sounds
 set autoread                    "Reload files changed outside vim
+set encoding=utf-8
 
 " This makes vim act like all other editors, buffers can
 " exist in the background without being in a window.
@@ -49,8 +50,11 @@ set nowb
 " ================ Persistent Undo ==================
 " Keep undo history across sessions, by storing in file.
 " Only works all the time.
-if has('persistent_undo') && isdirectory(expand('~').'/.vim/backups')
-  silent !mkdir ~/.vim/backups > /dev/null 2>&1
+if has('persistent_undo')
+  if !isdirectory(expand('~').'/.vim/backups')
+    silent !mkdir ~/.vim/backups > /dev/null 2>&1
+  endif
+
   set undodir=~/.vim/backups
   set undofile
 endif
@@ -114,8 +118,8 @@ set ignorecase      " Ignore case when searching...
 set smartcase       " ...unless we type a capital
 
 " ================ Custom Settings ========================
-if filereadable(expand("~/.yadr4win/vim/settings.vim"))
-  so ~/.yadr4win/vim/settings.vim
+if filereadable(expand("~/.vim/settings.vim"))
+  so ~/.vim/settings.vim
 endif
 
 if filereadable(expand("~/.vimrc.after"))

@@ -1,0 +1,5 @@
+mklink /h "%USERPROFILE%\.vimrc" "%USERPROFILE%\.yadr4win\vimrc"
+mklink /h "%USERPROFILE%\.gitconfig" "%USERPROFILE%\.yadr4win\git\gitconfig"
+mklink /h "%USERPROFILE%\.tmux.conf" "%USERPROFILE%\.yadr4win\tmux\tmux.conf"
+mklink /d "%USERPROFILE%\.vim" "%USERPROFILE%\.yadr4win\vim"
+

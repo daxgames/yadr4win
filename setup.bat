@@ -47,7 +47,17 @@ if "%is_admin%" == "1" (
     git clone https://github.com/VundleVim/Vundle.vim.git "%USERPROFILE%\.vim\bundle\vundle.vim"
   )
 
-  echo here
+  if exist "%USERPROFILE%\.aliases.doskey" (
+    "%USERPROFILE%\.aliases.doskey" "%USERPROFILE%\aliases.doskey.bak"
+  )
+
+  mklink /H "%USERPROFILE%\.aliases.doskey" "%USERPROFILE%\.yadr4win\aliases.doskey"
+
+  if exist "%USERPROFILE%\.tmux.conf" (
+    "%USERPROFILE%\.aliases.sh" "%USERPROFILE%\aliases.sh.bak"
+  )
+   
+  mklink /H "%USERPROFILE%\.aliases.sh" "%USERPROFILE%\.yadr4win\aliases.sh"
 
   set do_gitconfig.user=0
   if not exist "%USERPROFILE%\.gitconfig.user" (

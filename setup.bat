@@ -52,6 +52,12 @@ if exist "%USERPROFILE%\.yadr4win" (
     )
 
     if defined CMDER_DEV (
+      set CONEMU_CONFIG="%CMDER_ROOT%\config\ConEmu.xml"
+      echo Backing up "%CONEMU_CONFIG%" to "%CONEMU_CONFIG%.yadr4win"
+      move "%CONEMU_CONFIG%" "%CONEMU_CONFIG%.yadr4win"
+
+      mklink /H "%CONEMU_CONFIG%" "%USERPROFILE%\.yadr4win\cmder\ConEmu.xml"
+
       set ALIASES_PATH=%CMDER_ROOT%\config\aliases
       set ALIASES__SH_PATH=%CMDER_ROOT%\config\user-aliases.sh
     ) else (

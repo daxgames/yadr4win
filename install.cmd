@@ -140,6 +140,12 @@ if "%is_admin%" == "0" (
     )
   )
 )
+
+echo.
+echo All files that were not linked to YADR4Win files were backed up with a "[FILENAME].%BAK_EXT%".
+echo.
+echo If you are sure you have not lost anything you can clean these up by typing the following:
+echo   "%userprofile%\.yadr4win\cleanup.cmd"
 exit /b
 
 :is_symlink

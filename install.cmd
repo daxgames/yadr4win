@@ -3,6 +3,8 @@
 setlocal enabledelayedexpansion
 set debug=0 ::This slows things down a lot if set to greater than 0
 
+FOR /F "TOKENS=2" %%A IN ('ECHO %DATE%') DO @FOR /F "TOKENS=1,2,3 DELIMS=/" %%B IN ('ECHO %%A') DO @SET BAK_EXT=yadr4win.%%D%%B%%C_%TIME::=%
+
 call :is_admin
 call :debug_echo "%is_admin%"
 if "%is_admin%" == "0" (
@@ -10,8 +12,8 @@ if "%is_admin%" == "0" (
   echo Checking for "%USERPROFILE%\.vimrc" soft link...
   call :is_symlink "%USERPROFILE%\.vimrc" ".yadr4win\\vimrc]"
   if "!is_symlink!" EQU "1" (
-    echo Backing up "%USERPROFILE%\.vimrc" to ".vimrc.yadr4win
-    if exist "%USERPROFILE%\.vimrc" ren "%USERPROFILE%\.vimrc" ".vimrc.yadr4win"
+    echo Backing up "%USERPROFILE%\.vimrc" to ".vimrc.%bak_ext%
+    if exist "%USERPROFILE%\.vimrc" ren "%USERPROFILE%\.vimrc" ".vimrc.%bak_ext%"
     mklink "%USERPROFILE%\.vimrc" "%USERPROFILE%\.yadr4win\vimrc"
   ) else (
     echo -^> %USERPROFILE%\.vimrc is already symlinked, nothing done.
@@ -21,8 +23,8 @@ if "%is_admin%" == "0" (
   echo Checking for "%USERPROFILE%\.gitconfig" soft link...
   call :is_symlink "%USERPROFILE%\.gitconfig" ".yadr4win\\git\\gitconfig]"
   if "!is_symlink!" EQU "1" (
-    echo Backing up "%USERPROFILE%\.gitconfig" to ".gitconfig.yadr4win
-    if exist "%USERPROFILE%\.gitconfig" ren "%USERPROFILE%\.gitconfig" ".gitconfig.yadr4win"
+    echo Backing up "%USERPROFILE%\.gitconfig" to ".gitconfig.%bak_ext%
+    if exist "%USERPROFILE%\.gitconfig" ren "%USERPROFILE%\.gitconfig" ".gitconfig.%bak_ext%"
     mklink "%USERPROFILE%\.gitconfig" "%USERPROFILE%\.yadr4win\git\gitconfig"
   ) else (
     echo -^> %USERPROFILE%\.gitconfig is already symlinked, nothing done.
@@ -32,8 +34,8 @@ if "%is_admin%" == "0" (
   echo Checking for "%USERPROFILE%\.tmux.conf" soft link...
   call :is_symlink "%USERPROFILE%\.tmux.conf" ".yadr4win\\tmux\\tmux.conf]"
   if "!is_symlink!" EQU "1" (
-    echo Backing up "%USERPROFILE%\.tmux.conf" to ".tmux.conf.yadr4win
-    if exist "%USERPROFILE%\.tmux.conf" ren "%USERPROFILE%\.tmux.conf" ".tmux.conf.yadr4win"
+    echo Backing up "%USERPROFILE%\.tmux.conf" to ".tmux.conf.%bak_ext%
+    if exist "%USERPROFILE%\.tmux.conf" ren "%USERPROFILE%\.tmux.conf" ".tmux.conf.%bak_ext%"
     mklink "%USERPROFILE%\.tmux.conf" "%USERPROFILE%\.yadr4win\tmux\tmux.conf"
   ) else (
     echo -^> %USERPROFILE%\.tmux.conf is already symlinked, nothing done.
@@ -43,7 +45,7 @@ if "%is_admin%" == "0" (
   echo Checking for "%USERPROFILE%\.vim" soft link...
   call :is_symlink "%USERPROFILE%" ".yadr4win\\vim]"
   if "!is_symlink!" EQU "1" (
-    echo Backing up "%USERPROFILE%\.vim" to ".vim.yadr4win
+    echo Backing up "%USERPROFILE%\.vim" to ".vim.%bak_ext%
     if exist "%USERPROFILE%\.vim" move "%USERPROFILE%\.vim" "%USERPROFILE%\.vim.yad4rwin"
     mklink /d "%USERPROFILE%\.vim" "%USERPROFILE%\.yadr4win\vim"
   ) else (
@@ -80,7 +82,7 @@ if "%is_admin%" == "0" (
 
     call :is_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\\cmder\\user-Conemu.xml"
     if "!is_symlink!" EQU "1" (
-      if exist "%CMDER_ROOT%\config\user-ConEmu.xml" mv "%CMDER_ROOT%\config\user-ConEmu.xml" "%CMDER_ROOT%\config\user-ConEmu.xml.yadr4win"
+      if exist "%CMDER_ROOT%\config\user-ConEmu.xml" mv "%CMDER_ROOT%\config\user-ConEmu.xml" "%CMDER_ROOT%\config\user-ConEmu.xml.%bak_ext%"
       mklink "%CMDER_ROOT%\config\user-ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\user-ConEmu.xml"
     ) else (
       echo -^> %CMDER_ROOT%\config\user-ConEmu.xml is already symlinked, nothing done.
@@ -99,8 +101,8 @@ if "%is_admin%" == "0" (
   call :debug_echo ALIASES=!ALIASES_PATH!
   call :is_hardlink "!ALIASES_PATH!" ".yadr4win\\aliases"
   if "!is_hardlink!" == "1" (
-    echo Backing up "!ALIASES_PATH!" to "!ALIASES_PATH!.yadr4win"
-    move "!ALIASES_PATH!" "!ALIASES_PATH!.yadr4win"
+    echo Backing up "!ALIASES_PATH!" to "!ALIASES_PATH!.%bak_ext%"
+    move "!ALIASES_PATH!" "!ALIASES_PATH!.%bak_ext%"
     mklink /h "!ALIASES_PATH!" "!USERPROFILE!\.yadr4win\aliases.doskey"
   ) else (
     echo -^> !ALIASES_SH_PATH! is already hard linked, nothing done.
@@ -111,8 +113,8 @@ if "%is_admin%" == "0" (
   call :debug_echo ALIASES_SH=!ALIASES_SH_PATH!
   call :is_symlink "!ALIASES_SH_PATH!" ".yadr4win\\aliases.sh"
   if "!is_symlink!" == "1" (
-    echo Backing up "!ALIASES_SH_PATH!" to "!ALIASES_SH_PATH!.yadr4win"
-    if exist "!ALIASES_SH_PATH!" move "!ALIASES_SH_PATH!" "!ALIASES_SH_PATH!.yadr4win"
+    echo Backing up "!ALIASES_SH_PATH!" to "!ALIASES_SH_PATH!.%bak_ext%"
+    if exist "!ALIASES_SH_PATH!" move "!ALIASES_SH_PATH!" "!ALIASES_SH_PATH!.%bak_ext%"
     mklink "!ALIASES_SH_PATH!" "!USERPROFILE!\.yadr4win\aliases.sh"
   ) else (
     echo -^> !ALIASES_SH_PATH! is already symlinked, nothing done.

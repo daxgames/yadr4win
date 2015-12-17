@@ -15,7 +15,7 @@
 	trustctime = false
 	editor = vim
 	filemode = false
-	autocrlf = true
+	autocrlf = false
 [credential]
 	helper = cache --timeout=3600
 [merge]

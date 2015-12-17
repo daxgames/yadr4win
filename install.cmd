@@ -3,7 +3,11 @@
 setlocal enabledelayedexpansion
 set debug=0 ::This slows things down a lot if set to greater than 0
 
-FOR /F "TOKENS=2" %%A IN ('ECHO %DATE%') DO @FOR /F "TOKENS=1,2,3 DELIMS=/" %%B IN ('ECHO %%A') DO @SET BAK_EXT=yadr4win.%%D%%B%%C_%TIME::=%
+FOR /F "TOKENS=2" %%A IN ('ECHO %DATE%') DO @FOR /F "TOKENS=1,2,3 DELIMS=/" %%B IN ('ECHO %%A') DO (
+  @SET TIME_SHORT=%TIME::=%
+  @SET TIME_SHORT=!TIME_SHORT: =!
+  @SET BAK_EXT=yadr4win.%%D%%B%%C_!TIME_SHORT!
+)
 
 call :is_admin
 call :debug_echo "%is_admin%"
@@ -139,13 +143,16 @@ if "%is_admin%" == "0" (
       call :do_gitconfig.user
     )
   )
+
+  call :do_dos2unix
+  
+  echo.
+  echo All files that were not linked to YADR4Win files were backed up with a "[FILENAME].%BAK_EXT%".
+  echo.
+  echo If you are sure you have not lost anything you can clean these up by typing the following:
+  echo   "%userprofile%\.yadr4win\cleanup.cmd"
 )
 
-echo.
-echo All files that were not linked to YADR4Win files were backed up with a "[FILENAME].%BAK_EXT%".
-echo.
-echo If you are sure you have not lost anything you can clean these up by typing the following:
-echo   "%userprofile%\.yadr4win\cleanup.cmd"
 exit /b
 
 :is_symlink
@@ -212,3 +219,18 @@ exit /b
   )
   exit /b
 
+:do_dos2unix
+  dos2unix --help>nul
+  if "%errorlevel%" == "0" (
+    cd /d %~DP0
+    find . -type f -name '*.sh' -exec dos2unix '{}' +
+    find . -type f -name '*.vim' -exec dos2unix '{}' +
+    find . -type f -name '*.vundle' -exec dos2unix '{}' +
+    dos2unix ./vimrc
+    dos2unix ./git/gitconfig
+    dos2unix ./tmux/tmux.conf
+  ) else (
+    echo.
+    echo WARNING: 'dos2unix' is not found!  Some things may not work in that require unix file endings.
+  )
+  exit /b

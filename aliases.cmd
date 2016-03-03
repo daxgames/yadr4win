@@ -1,3 +1,8 @@
+;= @echo off
+;= rem Call DOSKEY and use this file as the macrofile
+;= %SystemRoot%\system32\doskey /listsize=1000 /macrofile=%0%
+;= rem In batch mode, jump to the end of the file
+;= goto :eof
 e.=explorer .
 gl=git log --oneline --all --graph --decorate  $*
 ls=ls --show-control-chars -F --color $*
@@ -131,3 +136,6 @@ g=git $*
 vi=vim $*  
 cmderroot=echo ^%cmder_root^%  
 home=cd /d ^%USERPROFILE^%
+atom=%CMDER_ROOT%/vendor/atom/atom
+apm=%CMDER_ROOT%/vendor/atom/resources/app/apm/bin/apm
+

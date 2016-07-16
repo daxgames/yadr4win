@@ -134,8 +134,9 @@ vimdiff=vim -d $*
 np=notepad $*
 g=git $*  
 vi=vim $*  
-cmderroot=echo ^%cmder_root^%  
-home=cd /d ^%USERPROFILE^%
+cmderr=cd %cmder_root%  
+home=cd /d %USERPROFILE%
+~=cd /d %USERPROFILE%
 atom=%CMDER_ROOT%/vendor/atom/atom
 apm=%CMDER_ROOT%/vendor/atom/resources/app/apm/bin/apm
-
+va=vi "%CMDER_ROOT%\config\user-aliases.cmd"

@@ -9,6 +9,18 @@ FOR /F "TOKENS=2" %%A IN ('ECHO %DATE%') DO @FOR /F "TOKENS=1,2,3 DELIMS=/" %%B 
   @SET BAK_EXT=yadr4win.%%D%%B%%C_!TIME_SHORT!
 )
 
+cd > "%TEMP%\curdir.txt"
+
+set /p workdir=<"%TEMP%\curdir.txt"
+
+if not "%WORKDIR%" == "%USERPROFILE%\.yadr4win" (
+  if not exist "%USERPROFILE%\.yadr4win" md "%USERPROFILE%\.yadr4win"
+
+  xcopy /s /e "%~DP0*" "%USERPROFILE%\.yadr4win\"
+) else (
+  echo "%WORKDIR%" == "%USERPROFILE%\.yadr4win"
+)
+
 call :is_admin
 call :debug_echo "%is_admin%"
 
@@ -85,26 +97,26 @@ if "%is_admin%" == "0" (
     set ALIASES_PS1_PS1PATH=$ENV:CMDER_ROOT\config\user-aliases.ps1
     set PROFILE_PS1_PATH=%CMDER_ROOT%\config\user-profile.ps1
   ) else (
-    set ALIASES_PATH=%USER_PROFILE%\.aliases.cmd
-    set ALIASES_SH_PATH=%USER_PROFILE%\.aliases.sh
-    set ALIASES_PS1_PATH=%USER_PROFILE%\Documents\WindowsPowerShell\Aliases.ps1
-    set ALIASES_PS1_PS1PATH=$ENV:USER_PROFILE\Documents\WindowsPowerShell\Aliases.ps1
+    set ALIASES_PATH=%USER_PROFILE%\.user-aliases.cmd
+    set ALIASES_SH_PATH=%USER_PROFILE%\.user-aliases.sh
+    set ALIASES_PS1_PATH=%USER_PROFILE%\Documents\WindowsPowerShell\user-aliases.ps1
+    set ALIASES_PS1_PS1PATH=$ENV:USER_PROFILE\Documents\WindowsPowerShell\user-aliases.ps1
     set PROFILE_PS1_PATH=%USER_PROFILE%\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
   )
 
-  call :is_hardlink "!ALIASES_PATH!" ".yadr4win\\aliases"
+  call :is_hardlink "!ALIASES_PATH!" ".yadr4win\\user-aliases.cmd"
   :: Need hardlink here because doskey.exe does not deal with hardlinks
   if "!is_hardlink!" == "1" (
     CALL :do_backup "!ALIASES_PATH!" !BAK_EXT! 
-    MKLINK /H "!ALIASES_PATH!" "!USERPROFILE!\.yadr4win\aliases.cmd"
+    MKLINK /H "!ALIASES_PATH!" "!USERPROFILE!\.yadr4win\user-aliases.cmd"
   ) else (
     echo -^> !ALIASES_PATH! is already hard linked, nothing done.
   )
 
-  call :is_hardlink "!ALIASES_PS1_PATH!" ".yadr4win\\aliases.ps1"
+  call :is_hardlink "!ALIASES_PS1_PATH!" ".yadr4win\\user-aliases.ps1"
   if "!is_hardlink!" == "1" (
     CALL :do_backup "!ALIASES_PS1_PATH!" !BAK_EXT! 
-    MKLINK /H "!ALIASES_PS1_PATH!" "!USERPROFILE!\.yadr4win\aliases.ps1"
+    MKLINK /H "!ALIASES_PS1_PATH!" "!USERPROFILE!\.yadr4win\user-aliases.ps1"
   ) else (
     echo -^> !ALIASES_PS1_PATH! is already hardlinked, nothing done.
   )
@@ -116,10 +128,10 @@ if "%is_admin%" == "0" (
     powershell -command "& {'. !ALIASES_PS1_PS1PATH!' | out-file '!PROFILE_PS1_PATH!' -append }"
   )
   
-  call :is_hardlink "!ALIASES_SH_PATH!" ".yadr4win\\aliases.sh"
+  call :is_hardlink "!ALIASES_SH_PATH!" ".yadr4win\\user-aliases.sh"
   if "!is_hardlink!" == "1" (
     CALL :do_backup "!ALIASES_SH_PATH!" !BAK_EXT! 
-    MKLINK /H "!ALIASES_SH_PATH!" "!USERPROFILE!\.yadr4win\aliases.sh"
+    MKLINK /H "!ALIASES_SH_PATH!" "!USERPROFILE!\.yadr4win\user-aliases.sh"
   ) else (
     echo -^> !ALIASES_SH_PATH! is already hardlinked, nothing done.
   )
@@ -159,9 +171,9 @@ if "%is_admin%" == "0" (
   call :is_hardlink "%USERPROFILE%\.tmux.conf" ".yadr4win\\tmux\\tmux.conf]"
   call :is_hardlink "%CMDER_ROOT%\MyCmder.cmd" ".yadr4win\\cmder\\MyCmder.cmd"
   call :is_hardlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\\cmder\\user-Conemu.xml"
-  call :is_hardlink "!ALIASES_PATH!" ".yadr4win\\aliases"
-  call :is_hardlink "!ALIASES_PS1_PATH!" ".yadr4win\\aliases.ps1"
-  call :is_hardlink "!ALIASES_SH_PATH!" ".yadr4win\\aliases.sh"
+  call :is_hardlink "!ALIASES_PATH!" ".yadr4win\\user-aliases.cmd"
+  call :is_hardlink "!ALIASES_PS1_PATH!" ".yadr4win\\user-aliases.ps1"
+  call :is_hardlink "!ALIASES_SH_PATH!" ".yadr4win\\user-aliases.sh"
 )
 
 exit /b

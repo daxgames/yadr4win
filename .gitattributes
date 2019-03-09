@@ -1,0 +1,8 @@
+*.sh text eol=lf
+*.vim text eol=lf
+*.vundle text eol=lf
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+vimrc text eol=lf
+git/gitconfig text eol=lf
+tmux/tmux.conf text eol=lf

@@ -1,17 +1,19 @@
 @ECHO OFF
 
-cd %userprofile%
+pushd %userprofile%
 call :clean_backups
+popd
 
 if defined CMDER_ROOT (
-  cd %CMDER_ROOT%
+  pushd %CMDER_ROOT%
   call :clean_backups
-  
-  cd %CMDER_ROOT%\config
+  popd
+
+  pushd %CMDER_ROOT%\config
   call :clean_backups
+  popd
 )
 
-cd %userprofile%
 exit /b
 
 :clean_backups

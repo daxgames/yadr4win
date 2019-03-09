@@ -142,4 +142,4 @@ home=cd /d %USERPROFILE%
 ~=cd /d %USERPROFILE%
 atom=%CMDER_ROOT%/vendor/atom/atom
 apm=%CMDER_ROOT%/vendor/atom/resources/app/apm/bin/apm
-va=vi "%CMDER_ROOT%\config\user_aliases.cmd"
+va=vim "%CMDER_ROOT%\config\user_aliases.cmd"

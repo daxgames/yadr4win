@@ -2,6 +2,25 @@
 
 setlocal enabledelayedexpansion
 set debug=0 ::This slows things down a lot if set to greater than 0
+if not "%~1" == "" call :%~1 & exit /b
+
+call SetEscChar.cmd
+if "%ConEmuANSI%" == "ON" (
+  set green=%esc%[1;32;40m
+  set red=%esc%[1;31;40m
+  set gray=%esc%[0m
+  set white=%esc%[1;37;40m
+  set yellow=%esc%[33;40m
+  set orange=%esc%[93;40m
+) else (
+  set green=
+  set red=
+  set gray=
+  set white=
+  set yellow=
+  set orange=
+)
+
 
 FOR /F "TOKENS=2" %%A IN ('ECHO %DATE%') DO @FOR /F "TOKENS=1,2,3 DELIMS=/" %%B IN ('ECHO %%A') DO (
   @SET TIME_SHORT=%TIME::=%
@@ -22,165 +41,166 @@ if not "%WORKDIR%" == "%USERPROFILE%\.yadr4win" (
 )
 
 call :is_admin
-call :debug_echo "%is_admin%"
-
-if "%is_admin%" == "0" (
-  call :is_hardlink "%USERPROFILE%\.vimrc" ".yadr4win\\vimrc]"
-  if "!is_hardlink!" EQU "1" (
-    CALL :do_backup "%USERPROFILE%\.vimrc" !BAK_EXT! 
-    MKLINK /H "%USERPROFILE%\.vimrc" "%USERPROFILE%\.yadr4win\vimrc"
-  ) else (
-    echo -^> %USERPROFILE%\.vimrc is already hardlinked, nothing done.
-  )
-
-  call :is_hardlink "%USERPROFILE%\.gitconfig" ".yadr4win\\git\\gitconfig]"
-  if "!is_hardlink!" EQU "1" (
-    CALL :do_backup "%USERPROFILE%\.gitconfig" !BAK_EXT! 
-    MKLINK /H "%USERPROFILE%\.gitconfig" "%USERPROFILE%\.yadr4win\git\gitconfig"
-  ) else (
-    echo -^> %USERPROFILE%\.gitconfig is already hardlinked, nothing done.
-  )
-
-  call :is_hardlink "%USERPROFILE%\.tmux.conf" ".yadr4win\\tmux\\tmux.conf]"
-  if "!is_hardlink!" EQU "1" (
-    CALL :do_backup "%USERPROFILE%\.tmux.conf" !BAK_EXT! 
-    MKLINK /H "%USERPROFILE%\.tmux.conf" "%USERPROFILE%\.yadr4win\tmux\tmux.conf"
-  ) else (
-    echo -^> %USERPROFILE%\.tmux.conf is already hardlinked, nothing done.
-  )
-
-  call :is_symlink "%USERPROFILE%" ".yadr4win\\vim]"
-  if "!is_symlink!" EQU "1" (
-    CALL :do_backup "%USERPROFILE%\.vim" !BAK_EXT! 
-    MKLINK /D "%USERPROFILE%\.vim" "%USERPROFILE%\.yadr4win\vim"
-  ) else (
-    echo -^> %USERPROFILE%\.vim is already symlinked, nothing done.
-  )
-
-  if not exist "%USERPROFILE%\.vim\bundle" (
-    mkdir "%USERPROFILE%\.vim\bundle"
-  ) else (
-    echo -^> %USERPROFILE%\.vim\bundle is already created, nothing done.
-  )
-
-  if not exist "%USERPROFILE%\.vim\bundle\vundle.vim" (
-    echo Installing 'vundle.vim'...
-    git clone https://github.com/VundleVim/Vundle.vim.git "%USERPROFILE%\.vim\bundle\vundle.vim"
-  ) else (
-    echo -^> %USERPROFILE%\.vim\bundle\vundle.vim is already installed, nothing done.
-  )
-
-  echo.
-  if defined CMDER_ROOT (
-    echo CMDER was found, configuring it if necessary...
-    call :is_hardlink "%CMDER_ROOT%\MyCmder.cmd" ".yadr4win\\cmder\\MyCmder.cmd"
-    if "!is_hardlink!" EQU "1" (
-      CALL :do_backup "%CMDER_ROOT%\MyCmder.cmd" !BAK_EXT! 
-      MKLINK /H "%CMDER_ROOT%\MyCmder.cmd" "%USERPROFILE%\.yadr4win\cmder\MyCmder.cmd"
-    ) else (
-      echo -^> %CMDER_ROOT%\MyCmder.cmd is already hardlinked, nothing done.
-    )
-
-    if exist "%CMDER_ROOT%\Mycmder.bat" del "%CMDER_ROOT%\Mycmder.bat"
-
-    call :is_hardlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\\cmder\\user-Conemu.xml"
-    if "!is_hardlink!" EQU "1" (
-      CALL :do_backup "%CMDER_ROOT%\config\user-ConEmu.xml" !BAK_EXT! 
-      MKLINK /H "%CMDER_ROOT%\config\user-ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\user-ConEmu.xml"
-    ) else (
-      echo -^> %CMDER_ROOT%\config\user-ConEmu.xml is already hardlinked, nothing done.
-    )
-
-    set ALIASES_PATH=%CMDER_ROOT%\config\user-aliases.cmd
-    set ALIASES_SH_PATH=%CMDER_ROOT%\config\user-aliases.sh
-    set ALIASES_PS1_PATH=%CMDER_ROOT%\config\user-aliases.ps1
-    set ALIASES_PS1_PS1PATH=$ENV:CMDER_ROOT\config\user-aliases.ps1
-    set PROFILE_PS1_PATH=%CMDER_ROOT%\config\user-profile.ps1
-  ) else (
-    set ALIASES_PATH=%USER_PROFILE%\.user-aliases.cmd
-    set ALIASES_SH_PATH=%USER_PROFILE%\.user-aliases.sh
-    set ALIASES_PS1_PATH=%USER_PROFILE%\Documents\WindowsPowerShell\user-aliases.ps1
-    set ALIASES_PS1_PS1PATH=$ENV:USER_PROFILE\Documents\WindowsPowerShell\user-aliases.ps1
-    set PROFILE_PS1_PATH=%USER_PROFILE%\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
-  )
-
-  call :is_hardlink "!ALIASES_PATH!" ".yadr4win\\user-aliases.cmd"
-  :: Need hardlink here because doskey.exe does not deal with hardlinks
-  if "!is_hardlink!" == "1" (
-    CALL :do_backup "!ALIASES_PATH!" !BAK_EXT! 
-    MKLINK /H "!ALIASES_PATH!" "!USERPROFILE!\.yadr4win\user-aliases.cmd"
-  ) else (
-    echo -^> !ALIASES_PATH! is already hard linked, nothing done.
-  )
-
-  call :is_hardlink "!ALIASES_PS1_PATH!" ".yadr4win\\user-aliases.ps1"
-  if "!is_hardlink!" == "1" (
-    CALL :do_backup "!ALIASES_PS1_PATH!" !BAK_EXT! 
-    MKLINK /H "!ALIASES_PS1_PATH!" "!USERPROFILE!\.yadr4win\user-aliases.ps1"
-  ) else (
-    echo -^> !ALIASES_PS1_PATH! is already hardlinked, nothing done.
-  )
-  
-  type "!PROFILE_PS1_PATH!" | findstr /i /r "^\. !ALIASES_PS1_PS1PATH!">nul
-  if "!ERRORLEVEL!" == "1" (
-    CALL :do_backup "!PROFIEL_PS1_PATH!" !BAK_EXT! 
-    echo Including '!ALIASES_PS1_PS1PATH!' in Powershell '!PROFILE_PS1_PATH!' 
-    powershell -command "& {'. !ALIASES_PS1_PS1PATH!' | out-file '!PROFILE_PS1_PATH!' -append }"
-  )
-  
-  call :is_hardlink "!ALIASES_SH_PATH!" ".yadr4win\\user-aliases.sh"
-  if "!is_hardlink!" == "1" (
-    CALL :do_backup "!ALIASES_SH_PATH!" !BAK_EXT! 
-    MKLINK /H "!ALIASES_SH_PATH!" "!USERPROFILE!\.yadr4win\user-aliases.sh"
-  ) else (
-    echo -^> !ALIASES_SH_PATH! is already hardlinked, nothing done.
-  )
-
-  echo.
-  set do_gitconfig.user=0
-  if not exist "%USERPROFILE%\.gitconfig.user" (
-    set do_gitconfig.user=8
-  ) else (
-    type "%USERPROFILE%\.gitconfig.user" | findstr /i /R /C:"^\[user\]$">nul
-    if !ERRORLEVEL! GTR 0 ( set /a do_gitconfig.user+=4 )
-    type "%USERPROFILE%\.gitconfig.user" | findstr /i /R /C:"^ *name *= *[a-z]*.*$">nul
-    if !ERRORLEVEL! GTR 0 ( set /a do_gitconfig.user+=2 )
-    type "%USERPROFILE%\.gitconfig.user" | findstr /i /r /c:"^ *email *= .*@.*$">nul
-    if !ERRORLEVEL! GTR 0 ( set /a do_gitconfig.user+=1 )
-
-    if "%do_gitconfig.user%" == "8" (
-      call :do_gitconfig.user
-    ) else if "%do_gitconfig.user%" GEQ "1" if "%do_gitconfig.user%" LEQ "7" (
-      call :do_gitconfig.user
-    )
-  )
-
-  call :do_dos2unix
-  
-  echo.
-  echo All files that were not linked to YADR4Win files were backed up with a "[FILENAME].%BAK_EXT%".
-  echo.
-  echo If you are sure you have not lost anything you can clean these up by typing the following:
-  echo   "%userprofile%\.yadr4win\cleanup.cmd"
-
-  echo.
-  echo Verifying...
-  set debug=1
-  call :is_hardlink "%USERPROFILE%\.vimrc" ".yadr4win\\vimrc]"
-  call :is_hardlink "%USERPROFILE%\.gitconfig" ".yadr4win\\git\\gitconfig]"
-  call :is_hardlink "%USERPROFILE%\.tmux.conf" ".yadr4win\\tmux\\tmux.conf]"
-  call :is_hardlink "%CMDER_ROOT%\MyCmder.cmd" ".yadr4win\\cmder\\MyCmder.cmd"
-  call :is_hardlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\\cmder\\user-Conemu.xml"
-  call :is_hardlink "!ALIASES_PATH!" ".yadr4win\\user-aliases.cmd"
-  call :is_hardlink "!ALIASES_PS1_PATH!" ".yadr4win\\user-aliases.ps1"
-  call :is_hardlink "!ALIASES_SH_PATH!" ".yadr4win\\user-aliases.sh"
+if "%is_admin%" == "1" (
+  call :debug_echo "%is_admin%" "This script Must be run as Admin!"
+  exit /b
+else
+  call :debug_echo "%is_admin%" "You are running as Admin!"
 )
 
+call :is_hardlink "%USERPROFILE%\.vimrc" ".yadr4win\vimrc"
+if "%is_hardlink%" EQU "1" (
+  call :do_backup "%USERPROFILE%\.vimrc" !BAK_EXT! 
+  fsutil hardlink create "%USERPROFILE%\.vimrc" "%USERPROFILE%\.yadr4win\vimrc"
+) else (
+  echo -^> %USERPROFILE%\.vimrc is already hardlinked, nothing done.
+)
+
+call :is_hardlink "%USERPROFILE%\.gitconfig" ".yadr4win\git\gitconfig"
+if "%is_hardlink%" EQU "1" (
+  call :do_backup "%USERPROFILE%\.gitconfig" !BAK_EXT! 
+  fsutil hardlink create "%USERPROFILE%\.gitconfig" "%USERPROFILE%\.yadr4win\git\gitconfig"
+) else (
+  echo -^> %USERPROFILE%\.gitconfig is already hardlinked, nothing done.
+)
+
+call :is_hardlink "%USERPROFILE%\.tmux.conf" ".yadr4win\tmux\tmux.conf"
+if "%is_hardlink%" EQU "1" (
+  CALL :do_backup "%USERPROFILE%\.tmux.conf" !BAK_EXT! 
+  fsutil hardlink create "%USERPROFILE%\.tmux.conf" "%USERPROFILE%\.yadr4win\tmux\tmux.conf"
+) else (
+  echo -^> %USERPROFILE%\.tmux.conf is already hardlinked, nothing done.
+)
+
+call :is_dir_symlink "%USERPROFILE%\.vim" "%USERPROFILE:\=\\%\\.yadr4win\\vim"
+if "!is_symlink!" EQU "1" (
+  CALL :do_backup "%USERPROFILE%\.vim" !BAK_EXT! 
+  mklink /d "%USERPROFILE%\.vim" "%USERPROFILE%\.yadr4win\vim"
+) else (
+  echo -^> %USERPROFILE%\.vim is already a symlink, nothing done.
+)
+
+if not exist "%USERPROFILE%\.vim\bundle" (
+  echo mkdir "%USERPROFILE%\.vim\bundle"
+  mkdir "%USERPROFILE%\.vim\bundle"
+) else (
+  echo -^> %USERPROFILE%\.vim\bundle is already created, nothing done.
+)
+
+if not exist "%USERPROFILE%\.vim\bundle\vundle.vim" (
+  echo Installing 'vundle.vim'...
+  git clone https://github.com/VundleVim/Vundle.vim.git "%USERPROFILE%\.vim\bundle\vundle.vim"
+) else (
+  echo -^> %USERPROFILE%\.vim\bundle\vundle.vim is already installed, nothing done.
+)
+
+echo.
+if defined CMDER_ROOT (
+  echo CMDER was found, configuring it if necessary...
+  call :is_hardlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\cmder\user-Conemu.xml"
+  if "!is_hardlink!" EQU "1" (
+    echo here
+    CALL :do_backup "%CMDER_ROOT%\config\user-ConEmu.xml" !BAK_EXT! 
+    fsutil hardlink create "%CMDER_ROOT%\config\user-ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\user-ConEmu.xml"
+  ) else (
+    echo -^> %CMDER_ROOT%\config\user-ConEmu.xml is already hardlinked, nothing done.
+  )
+
+  set ALIASES_CMD_PATH=%CMDER_ROOT%\config\user_aliases.cmd
+  set PROFILE_CMD_PATH=%CMDER_ROOT%\config\user_profile.cmd
+  set ALIASES_SH_PATH=%CMDER_ROOT%\config\user_aliases.sh
+  set PROFILE_SH_PATH=%CMDER_ROOT%\config\user_profile.sh
+  set ALIASES_PS1_PATH=%CMDER_ROOT%\config\user_aliases.ps1
+  set PROFILE_PS1_PATH=%CMDER_ROOT%\config\user_profile.ps1
+  set ALIASES_PS1_PS_PATH=$env:CMDER_ROOT\config\user_aliases.ps1
+  set PROFILE_PS1_PS_PS_PATH=$env:CMDER_ROOT\config\user_profile.ps1
+) else (
+  set ALIASES_CMD_PATH=%USERPROFILE%\.user_aliases.cmd
+  set ALIASES_SH_PATH=%USERPROFILE%\.user_aliases.sh
+  set ALIASES_PS1_PATH=%USERPROFILE%\Documents\WindowsPowerShell\user_aliases.ps1
+  set PROFILE_PS1_PATH=%USERPROFILE%\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
+)
+
+call :is_hardlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
+:: Need hardlink here because doskey.exe does not deal with softlinks
+if "%is_hardlink%" == "1" (
+  call :do_backup "!ALIASES_CMD_PATH!" !BAK_EXT! 
+  fsutil hardlink create "!ALIASES_CMD_PATH!" "!USERPROFILE!\.yadr4win\user_aliases.cmd"
+) else (
+  echo -^> !ALIASES_CMD_PATH! is already hard linked, nothing done.
+)
+
+call :is_hardlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
+if "%is_hardlink%" == "1" (
+  call :do_backup "!ALIASES_PS1_PATH!" !BAK_EXT! 
+  fsutil hardlink create "!ALIASES_PS1_PATH!" "!USERPROFILE!\.yadr4win\user_aliases.ps1"
+) else (
+  echo -^> !ALIASES_PS1_PATH! is already hardlinked, nothing done.
+)
+
+echo "Checking '!ALIASES_PS1_PS_PATH!' is sourced in Powershell '!PROFILE_PS1_PATH!'..."
+rem echo type "!PROFILE_PS1_PATH!" ^| findstr /i /r /c:"^^. !ALIASES_PS1_PS_PATH:\=\\!"
+type "!PROFILE_PS1_PATH!" | findstr /i /r /c:"^. !ALIASES_PS1_PS_PATH:\=\\!">nul
+if "!ERRORLEVEL!" == "1" (
+  CALL :do_backup "!PROFILE_PS1_PATH!" !BAK_EXT! 
+  echo "Sourcing '!ALIASES_PS1_PS_PATH!' in Powershell '!PROFILE_PS1_PATH!'"
+  echo . '!ALIASES_PS1_PS_PATH!' >> "!PROFILE_PS1_PATH!"
+) else (
+  call :debug_echo 0 "'!ALIASES_PS1_PS_PATH!' is already sourced in Powershell '!PROFILE_PS1_PATH!'."
+)
+
+call :is_hardlink "!ALIASES_SH_PATH!" ".yadr4win\\user_aliases.sh"
+if "%is_hardlink%" == "1" (
+  CALL :do_backup "!ALIASES_SH_PATH!" !BAK_EXT! 
+  fsutil hardlink create "!ALIASES_SH_PATH!" "!USERPROFILE!\.yadr4win\user_aliases.sh"
+) else (
+  echo -^> !ALIASES_SH_PATH! is already hardlinked, nothing done.
+)
+
+echo.
+set do_gitconfig.user=0
+if not exist "%USERPROFILE%\.gitconfig.user" (
+  set do_gitconfig.user=8
+) else (
+  type "%USERPROFILE%\.gitconfig.user" | findstr /i /R /C:"^\[user\]$">nul
+  if !ERRORLEVEL! GTR 0 ( set /a do_gitconfig.user+=4 )
+  type "%USERPROFILE%\.gitconfig.user" | findstr /i /R /C:"^ *name *= *[a-z]*.*$">nul
+  if !ERRORLEVEL! GTR 0 ( set /a do_gitconfig.user+=2 )
+  type "%USERPROFILE%\.gitconfig.user" | findstr /i /r /c:"^ *email *= .*@.*$">nul
+  if !ERRORLEVEL! GTR 0 ( set /a do_gitconfig.user+=1 )
+
+  if "%do_gitconfig.user%" == "8" (
+    call :do_gitconfig.user
+  ) else if "%do_gitconfig.user%" GEQ "1" if "%do_gitconfig.user%" LEQ "7" (
+    call :do_gitconfig.user
+  )
+)
+
+call :do_dos2unix
+
+echo.
+echo All files that were not linked to .yadr4win files were backed up with a "[FILENAME].%BAK_EXT%".
+echo.
+echo If you are sure you have not lost anything you can clean these up by typing the following:
+echo   "%userprofile%\.yadr4win\cleanup.cmd"
+
+echo.
+echo Verifying...
+set debug=1
+call :is_hardlink "%USERPROFILE%\.vimrc" ".yadr4win\\vimrc"
+call :is_dir_symlink "%USERPROFILE%\.vim" ".yadr4win\\vim"
+call :is_hardlink "%USERPROFILE%\.gitconfig" ".yadr4win\\git\\gitconfig"
+call :is_hardlink "%USERPROFILE%\.tmux.conf" ".yadr4win\\tmux\\tmux.conf"
+call :is_hardlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\\cmder\\user-Conemu.xml"
+call :is_hardlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
+call :is_hardlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
+call :is_hardlink "!ALIASES_SH_PATH!" ".yadr4win\\user_aliases.sh"
+
 exit /b
+
 :do_backup
   set SOURCE_FILE=%~1
   set BACKUP_FILE=%~1.%~2
-
 
   if exist "%SOURCE_FILE%" ( 
     echo.
@@ -189,27 +209,59 @@ exit /b
   )
   exit /b
 
+:is_junction
+  set junction=%~1
+  set junction_target=%~2
+
+  echo.
+  echo Checking for "!junction!" junction...
+  dir !junction!\.. | findstr /i "junction" | findstr /i "!junction_target!" >nul
+  set "is_junction=%errorlevel%"
+  call :debug_echo %is_junction%:%junction%
+  exit /b
+
+:is_dir_symlink
+  set symlink=%~1
+  set symlink_name=%~nx1
+  set symlink_target=%~2
+
+  echo.
+  echo Checking for "!symlink!\" directory symlink...
+  rem echo dir !symlink!\.. ^| findstr /i "symlinkd" ^| findstr /i /c:" %symlink_name% " ^| findstr /r "[!symlink_target!]"
+  dir !symlink!\.. | findstr /i "symlinkd" | findstr /i /c:" %symlink_name% " | findstr /r "[!symlink_target!]">nul
+  set "is_symlink=%errorlevel%"
+  call :debug_echo !is_symlink! "%symlink%"
+  exit /b
+
 :is_symlink
   set symlink=%~1
-  set symlink_target=%~2
+   set symlink_target=%~2
 
   echo.
   echo Checking for "!symlink!" symlink...
   dir !symlink! | findstr /i "symlink" | findstr /i "!symlink_target!" >nul
   set "is_symlink=%errorlevel%"
-  call :debug_echo %is_symlink%:%symlink%
+  REM call :debug_echo %is_symlink%:%symlink%
+  call :debug_echo !is_symlink! "%symlink%"
   exit /b
 
 :is_hardlink
   set hardlink=%~1
   set hardlink_target=%~2
 
+  if not exist "%hardlink%" (
+    echo "%hardlink%" does not exist!
+    set "is_hardlink=1"
+    exit /b
+  )
+
   echo.
   echo Checking for "!hardlink!" hardlink...
-  fsutil hardlink list !hardlink! | findstr /i /r "!hardlink_target!$" >nul
+  rem fsutil hardlink list "!hardlink!"
+  rem echo fsutil hardlink list "!hardlink!" ^| findstr /i /c:"!hardlink_target!"
+  fsutil hardlink list "!hardlink!" | findstr /i /c:"!hardlink_target!"
   set "is_hardlink=%errorlevel%"
-  call :debug_run fsutil hardlink list "!hardlink!"
-  call :debug_echo %is_hardlink%:%hardlink%
+  call :debug_echo !is_hardlink! "%hardlink%"
   exit /b
 
 :debug_run
@@ -219,14 +271,26 @@ exit /b
   exit /b
 
 :debug_echo
-  if "%debug%" GTR "0" (
-    %Windir%\System32\WindowsPowerShell\v1.0\Powershell.exe -noprofile write-host -foregroundcolor Yellow DEBUG: %*
+  set status=%~1
+  set message=%~2
+  shift
+  
+  if "%status" == "1" (
+    set color=%red%
+  ) else (
+    set color=%green%
   )
+  echo %color%%message%%white%
+
+  REM if "%debug%" GTR "0" (
+  REM   REM %Windir%\System32\WindowsPowerShell\v1.0\Powershell.exe -noprofile write-host -foregroundcolor Yellow DEBUG: %*
+  REM   echo DEBUG: %*
+  REM )
   exit /b
 
 :is_admin
   if exist "%TEMP%\test.tmp" del "%TEMP%\test.tmp"
-  MKLINK /H "%TEMP%\test.tmp" %~DP0README.md>nul
+  fsutil hardlink create "%TEMP%\test.tmp" %~DP0README.md>nul
   if "%ERRORLEVEL%" == "0" (
     if exist "%TEMP%\test.tmp" del "%TEMP%\test.tmp"
     set is_admin=0
@@ -269,12 +333,12 @@ exit /b
   if "%errorlevel%" == "0" (
     echo Please wait converting required files to unix format...
     cd /d %~DP0
-    find . -type f -name '*.sh' -exec dos2unix '{}' + >nul 2>&1
-    find . -type f -name '*.vim' -exec dos2unix '{}' + >nul 2>&1
-    find . -type f -name '*.vundle' -exec dos2unix '{}' + >nul 2>&1
-    dos2unix ./vimrc >nul 2>&1
-    dos2unix ./git/gitconfig >nul 2>&1
-    dos2unix ./tmux/tmux.conf >nul 2>&1
+    find . -v -type f -name '*.sh' -exec dos2unix '{}'
+    find . -v -type f -name '*.vim' -exec dos2unix '{}'
+    find . -v -type f -name '*.vundle' -exec dos2unix '{}'
+    rem dos2unix ./vimrc
+    rem dos2unix ./git/gitconfig
+    rem dos2unix ./tmux/tmux.conf
   ) else (
     echo.
     echo WARNING: 'dos2unix' is not found!  Some things may not work in that require unix file endings.

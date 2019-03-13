@@ -2,6 +2,10 @@
 
 setlocal enabledelayedexpansion
 set debug=0 ::This slows things down a lot if set to greater than 0
+if exist "%cmder_root%\vendor\git-for-windows" (
+  set cmder_full=1
+)
+
 if not "%~1" == "" call :%~1 & exit /b
 
 call SetEscChar.cmd
@@ -20,7 +24,6 @@ if "%ConEmuANSI%" == "ON" (
   set yellow=
   set orange=
 )
-
 
 FOR /F "TOKENS=2" %%A IN ('ECHO %DATE%') DO @FOR /F "TOKENS=1,2,3 DELIMS=/" %%B IN ('ECHO %%A') DO (
   @SET TIME_SHORT=%TIME::=%
@@ -42,7 +45,7 @@ if not "%WORKDIR%" == "%USERPROFILE%\.yadr4win" (
 
 call :is_admin
 if "%is_admin%" == "1" (
-  call :debug_echo "%is_admin%" "This script Must be run as Admin!"
+  call :debug_echo 3 "This script Must be run as Admin!"
   exit /b
 else
   call :debug_echo "%is_admin%" "You are running as Admin!"
@@ -217,7 +220,7 @@ exit /b
   echo Checking for "!junction!" junction...
   dir !junction!\.. | findstr /i "junction" | findstr /i "!junction_target!" >nul
   set "is_junction=%errorlevel%"
-  call :debug_echo %is_junction%:%junction%
+  call :debug_echo %is_junction% "%junction%"
   exit /b
 
 :is_dir_symlink
@@ -250,8 +253,9 @@ exit /b
   set hardlink_target=%~2
 
   if not exist "%hardlink%" (
-    echo "%hardlink%" does not exist!
+    echo.
     set "is_hardlink=1"
+    call :debug_echo !is_hardlink! "%hardlink%"
     exit /b
   )
 
@@ -275,17 +279,20 @@ exit /b
   set message=%~2
   shift
   
-  if "%status" == "1" (
-    set color=%red%
-  ) else (
+  if "%status%" == "0" (
     set color=%green%
   )
+
+  if "%status%" == "1" (
+    set color=%yellow%
+  )
+
+  if "%status%" == "3" (
+    set color=%red%
+  )
+
   echo %color%%message%%white%
 
-  REM if "%debug%" GTR "0" (
-  REM   REM %Windir%\System32\WindowsPowerShell\v1.0\Powershell.exe -noprofile write-host -foregroundcolor Yellow DEBUG: %*
-  REM   echo DEBUG: %*
-  REM )
   exit /b
 
 :is_admin
@@ -329,18 +336,35 @@ exit /b
   exit /b
 
 :do_dos2unix
-  dos2unix --help>nul
-  if "%errorlevel%" == "0" (
-    echo Please wait converting required files to unix format...
-    cd /d %~DP0
-    find . -v -type f -name '*.sh' -exec dos2unix '{}'
-    find . -v -type f -name '*.vim' -exec dos2unix '{}'
-    find . -v -type f -name '*.vundle' -exec dos2unix '{}'
-    rem dos2unix ./vimrc
-    rem dos2unix ./git/gitconfig
-    rem dos2unix ./tmux/tmux.conf
+  if exist "%cmder_root%\vendor\git-for-windows\usr\bin\find.exe" (
+    set find_path="%cmder_root%\vendor\git-for-windows\usr\bin\find.exe"
+  )
+ 
+  echo find=%find_path%
+
+  if exist "%cmder_root%\vendor\git-for-windows\usr\bin\dos2unix.exe" (
+    set dos2unix_path=%cmder_root%\vendor\git-for-windows\usr\bin\dos2unix.exe
+  )
+
+  echo dos2unix=%dos2unix_path%
+
+  if exist "%cmder_root%\vendor\git-for-windows\usr\bin\find.exe" (
+    if exist "%cmder_root%\vendor\git-for-windows\usr\bin\dos2unix.exe" (
+      if exist "%cmder_root%\vendor\git-for-windows\usr\bin\xargs.exe" (
+        echo Please wait converting required files to unix format...
+        cd /d %~DP0
+        echo %find_path% . -type f -name '*.sh' ^| xargs "%dos2unix_path%"
+        %find_path% . -type f -name '*.sh' | find -i -v "user_aliases.sh" | xargs "%dos2unix_path%"
+        
+        echo %find_path% . -type f -name '*.vim' ^| xargs "%dos2unix_path%"
+        %find_path% . -type f -name '*.vim' | xargs "%dos2unix_path%"
+        
+        echo %find_path% . -type f -name '*.vundle' ^| xargs "%dos2unix_path%"
+        %find_path% . -type f -name '*.vundle' | xargs "%dos2unix_path%"
+      )
+    )
   ) else (
     echo.
-    echo WARNING: 'dos2unix' is not found!  Some things may not work in that require unix file endings.
+    echo WARNING: dos2unix is not found!  Some things may not work in that require unix file endings.
   )
   exit /b

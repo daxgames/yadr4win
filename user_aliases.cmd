@@ -9,7 +9,6 @@ gl=git log --oneline --all --graph --decorate  $*
 ls=ls --show-control-chars -F --color $*
 pwd=cd
 clear=cls
-history=cat "%CMDER_ROOT%\config\.history"
 unalias=alias /d $1
 vi=vim $*
 cmderr=cd /d "%CMDER_ROOT%"
@@ -140,6 +139,15 @@ vi=vim $*
 cmderr=cd %cmder_root%  
 home=cd /d %USERPROFILE%
 ~=cd /d %USERPROFILE%
-atom=%CMDER_ROOT%/vendor/atom/atom
-apm=%CMDER_ROOT%/vendor/atom/resources/app/apm/bin/apm
 va=vim "%CMDER_ROOT%\config\user_aliases.cmd"
+sublime_text="%CMDER_ROOT%\vendor\sublime_text_3\sublime_text"
+atom="%CMDER_ROOT%\vendor\atom\Atom\atom $*"
+apm="%CMDER_ROOT%\vendor\atom\Atom\resources\app\apm\bin\apm $*"
+history3=cat -n %CMDER_ROOT%\config\.history  
+history4=cat -n "%CMDER_ROOT%\config\.history"  
+history5=cat -n "C:\Users\user\cmder dev\config\.history"  
+history6=cat -n C:\Users\user\cmder dev\config\.history  
+history2=cat -n %CMDER_ROOT%\config\.history  
+history=cat -n "%CMDER_ROOT%\config\.history"  
+myupstream=git remote -v $b grep upstream $b head -n 1 $b cut -f 2 $b cut -d ' ' -f 1 $g %temp%\repo.tmp $t unix2dos %temp%\repo.tmp 2$lnull $t sleep 1 $t set /p x=$l%temp%\repo.tmp $t start /b %x%  
+myrepo=git remote -v $b grep origin $b head -n 1 $b cut -f 2 $b cut -d ' ' -f 1 $g %temp%\repo.tmp $t unix2dos %temp%\repo.tmp 2$lnull $t sleep 1 $t set /p x=$l%temp%\repo.tmp $t start /b %x%  

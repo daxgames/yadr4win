@@ -143,3 +143,6 @@ home=cd /d %USERPROFILE%
 atom=%CMDER_ROOT%/vendor/atom/atom
 apm=%CMDER_ROOT%/vendor/atom/resources/app/apm/bin/apm
 va=vim "%CMDER_ROOT%\config\user_aliases.cmd"
+nvim="%CMDER_ROOT%\bin\neovim\bin\nvim.exe" $*
+..=cd ..
+vi=vim $*

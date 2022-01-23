@@ -16,8 +16,6 @@
 	editor = vim
 	filemode = false
 	autocrlf = false
-[credential]
-	helper = cache --timeout=3600
 [merge]
 	tool = vimdiff
 [mergetool]
@@ -117,3 +115,5 @@
   pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
 [include]
   path = .gitconfig.user
+[credential]
+	helper = 'store'

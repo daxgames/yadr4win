@@ -1,5 +1,9 @@
 new-alias ssh $env:cmder_root\vendor\git-for-windows\usr\bin\ssh.exe -erroraction silentlycontinue
 
+function cmderr {
+  cd $ENV:CMDER_ROOT
+}
+
 function va {
   vi "$ENV:CMDER_ROOT\config\user-aliases.ps1"
 }
@@ -19,4 +23,5 @@ function ga($git_args) {
 }
 
 new-alias sublime_text '$env:cmder_root\vendor\sublime_text_3\sublime_text' -erroraction silentlycontinue
-
+new-alias atom '$env:cmder_root\vendor\atom\Atom\atom' -erroraction silentlycontinue
+new-alias apm '$env:cmder_root\vendor\atom\Atom\resources\app\apm\bin\apm' -erroraction silentlycontinue

@@ -15,7 +15,6 @@
 	trustctime = false
 	editor = vim
 	filemode = false
-	autocrlf = false
 [merge]
 	tool = vimdiff
 [mergetool]

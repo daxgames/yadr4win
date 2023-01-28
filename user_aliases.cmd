@@ -151,7 +151,6 @@ history4=cat -n "%CMDER_ROOT%\config\.history"
 history5=cat -n "C:\Users\user\cmder dev\config\.history"
 history6=cat -n C:\Users\user\cmder dev\config\.history
 history2=cat -n %CMDER_ROOT%\config\.history
-history=cat -n "%CMDER_ROOT%\config\.history"
 myupstream=git remote -v $b grep upstream $b head -n 1 $b cut -f 2 $b cut -d ' ' -f 1 $g %temp%\repo.tmp $t unix2dos %temp%\repo.tmp 2$lnull $t sleep 1 $t set /p x=$l%temp%\repo.tmp $t start /b %x%
 myrepo=git remote -v $b grep origin $b head -n 1 $b cut -f 2 $b cut -d ' ' -f 1 $g %temp%\repo.tmp $t unix2dos %temp%\repo.tmp 2$lnull $t sleep 1 $t set /p x=$l%temp%\repo.tmp $t start /b %x%
 subl="%CMDER_ROOT%\bin\sublime_text\sublime_text.exe" $*

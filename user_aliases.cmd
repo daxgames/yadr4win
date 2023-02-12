@@ -156,3 +156,4 @@ myrepo=git remote -v $b grep origin $b head -n 1 $b cut -f 2 $b cut -d ' ' -f 1 
 subl="%CMDER_ROOT%\bin\sublime_text\sublime_text.exe" $*
 sublv="%CMDER_ROOT%\bin\sublime_text\sublime_text.exe" $* -new_console:s50H
 subls="%CMDER_ROOT%\bin\sublime_text\sublime_text.exe" $* -new_console:s50V
+pip=python -m pip $*

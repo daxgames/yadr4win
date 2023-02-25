@@ -92,7 +92,7 @@ if not exist "%USERPROFILE%\.vim\bundle" (
 
 if not exist "%USERPROFILE%\.vim\bundle\vundle.vim" (
   echo Installing 'vundle.vim'...
-  git clone https://github.com/VundleVim/Vundle.vim.git "%USERPROFILE%\.vim\bundle\vundle.vim"
+  git clone https://github.com/mihaigalos/Vundle.vim "%USERPROFILE%\.vim\bundle\vundle.vim"
 ) else (
   echo -^> %USERPROFILE%\.vim\bundle\vundle.vim is already installed, nothing done.
 )
@@ -143,11 +143,11 @@ if "%is_hardlink%" == "1" (
 
 echo "Checking '!ALIASES_PS1_PS_PATH!' is sourced in Powershell '!PROFILE_PS1_PATH!'..."
 rem echo type "!PROFILE_PS1_PATH!" ^| findstr /i /r /c:"^^. !ALIASES_PS1_PS_PATH:\=\\!"
-type "!PROFILE_PS1_PATH!" | findstr /i /r /c:"^. !ALIASES_PS1_PS_PATH:\=\\!">nul
+type "!PROFILE_PS1_PATH!" | findstr /i /r /c:"^. \"!ALIASES_PS1_PS_PATH:\=\\!\"">nul
 if "!ERRORLEVEL!" == "1" (
-  CALL :do_backup "!PROFILE_PS1_PATH!" !BAK_EXT! 
+  REM CALL :do_backup "!PROFILE_PS1_PATH!" !BAK_EXT! 
   echo "Sourcing '!ALIASES_PS1_PS_PATH!' in Powershell '!PROFILE_PS1_PATH!'"
-  echo . '!ALIASES_PS1_PS_PATH!' >> "!PROFILE_PS1_PATH!"
+  echo . "!ALIASES_PS1_PS_PATH!" >> "!PROFILE_PS1_PATH!"
 ) else (
   call :debug_echo 0 "'!ALIASES_PS1_PS_PATH!' is already sourced in Powershell '!PROFILE_PS1_PATH!'."
 )
@@ -354,13 +354,13 @@ exit /b
         echo Please wait converting required files to unix format...
         cd /d %~DP0
         echo %find_path% . -type f -name '*.sh' ^| xargs "%dos2unix_path%"
-        %find_path% . -type f -name '*.sh' | find -i -v "user_aliases.sh" | xargs "%dos2unix_path%"
+        %find_path% . -type f -name '*.sh' | xargs "%dos2unix_path%" 2>nul
         
         echo %find_path% . -type f -name '*.vim' ^| xargs "%dos2unix_path%"
-        %find_path% . -type f -name '*.vim' | xargs "%dos2unix_path%"
+        %find_path% . -type f -name '*.vim' | xargs "%dos2unix_path%" 2>nul
         
         echo %find_path% . -type f -name '*.vundle' ^| xargs "%dos2unix_path%"
-        %find_path% . -type f -name '*.vundle' | xargs "%dos2unix_path%"
+        %find_path% . -type f -name '*.vundle' | xargs "%dos2unix_path%" 2>nul
       )
     )
   ) else (

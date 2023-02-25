@@ -157,3 +157,4 @@ subl="%CMDER_ROOT%\bin\sublime_text\sublime_text.exe" $*
 sublv="%CMDER_ROOT%\bin\sublime_text\sublime_text.exe" $* -new_console:s50H
 subls="%CMDER_ROOT%\bin\sublime_text\sublime_text.exe" $* -new_console:s50V
 pip=python -m pip $*
+bcompare="%CMDER_ROOT%\bin\BeyondCompare4\BCompare.exe"  

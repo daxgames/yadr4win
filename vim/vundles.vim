@@ -7,7 +7,7 @@ set rtp+=~/.vim/vundles/ "Submodules
 call vundle#begin()
 
 " let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+Plugin 'mihaigalos/Vundle.vim'
 
 " YADR's vundles are split up by category into smaller files
 " This reduces churn and makes it easier to fork. See

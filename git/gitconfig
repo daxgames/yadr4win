@@ -112,7 +112,9 @@
   svnl = svn log --oneline --show-commit[format]
 [format]
   pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
-[include]
-  path = .gitconfig.user
 [credential]
 	helper = 'store'
+[credential "helperselector"]
+	selected = manager-core
+[include]
+  path = .gitconfig.user

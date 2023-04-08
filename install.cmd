@@ -92,7 +92,7 @@ if not exist "%USERPROFILE%\.vim\bundle" (
 
 if not exist "%USERPROFILE%\.vim\bundle\vundle.vim" (
   echo Installing 'vundle.vim'...
-  git clone https://github.com/mihaigalos/Vundle.vim "%USERPROFILE%\.vim\bundle\vundle.vim"
+  git clone https://github.com/VundleVim/Vundle.vim.git "%USERPROFILE%\.vim\bundle\vundle.vim"
 ) else (
   echo -^> %USERPROFILE%\.vim\bundle\vundle.vim is already installed, nothing done.
 )

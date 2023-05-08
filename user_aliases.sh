@@ -125,3 +125,11 @@ alias sublime_text='$cmder_root/vendor/sublime_text_3/sublime_text'
 alias sublime_text='"$cmder_root/vendor/sublime_text_3/sublime_text"'
 alias atom='"$cmder_root/vendor/atom/Atom/atom"'
 alias apm='"$cmder_root/vendor/atom/Atom/resources/app/apm/bin/apm"'
+alias sci='svn ci -m "$*"'
+alias whome='cd "$USERPROFILE"'
+
+function myrepos() {
+  cd "$USERPROFILE/repos/$*"
+}
+
+alias repos='myrepos $*'

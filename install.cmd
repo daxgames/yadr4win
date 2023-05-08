@@ -110,6 +110,10 @@ if defined CMDER_ROOT (
     echo -^> %CMDER_ROOT%\config\user-ConEmu.xml is already hardlinked, nothing done.
   )
 
+  echo Updating Cmder 'conemu.xml' with our version...
+  CALL :do_backup "%CMDER_ROOT%\vendor\conemu-maximus5\ConEmu.xml" !BAK_EXT!
+  cp  "%CMDER_ROOT%\config\user-ConEmu.xml" "%CMDER_ROOT%\vendor\conemu-maximus5\ConEmu.xml"
+
   set ALIASES_CMD_PATH=%CMDER_ROOT%\config\user_aliases.cmd
   set PROFILE_CMD_PATH=%CMDER_ROOT%\config\user_profile.cmd
   set ALIASES_SH_PATH=%CMDER_ROOT%\config\user_aliases.sh
@@ -144,11 +148,11 @@ if "%is_hardlink%" == "1" (
 
 echo "Checking '!ALIASES_PS1_PS_PATH!' is sourced in Powershell '!PROFILE_PS1_PATH!'..."
 rem echo type "!PROFILE_PS1_PATH!" ^| findstr /i /r /c:"^^. !ALIASES_PS1_PS_PATH:\=\\!"
-type "!PROFILE_PS1_PATH!" | findstr /i /r /c:"^. !ALIASES_PS1_PS_PATH:\=\\!">nul
+type "!PROFILE_PS1_PATH!" | findstr /i /r /c:"^. \"!ALIASES_PS1_PS_PATH:\=\\!\"">nul
 if "!ERRORLEVEL!" == "1" (
-  CALL :do_backup "!PROFILE_PS1_PATH!" !BAK_EXT! 
+  REM CALL :do_backup "!PROFILE_PS1_PATH!" !BAK_EXT!
   echo "Sourcing '!ALIASES_PS1_PS_PATH!' in Powershell '!PROFILE_PS1_PATH!'"
-  echo . '!ALIASES_PS1_PS_PATH!' >> "!PROFILE_PS1_PATH!"
+  echo . "!ALIASES_PS1_PS_PATH!" >> "!PROFILE_PS1_PATH!"
 ) else (
   call :debug_echo 0 "'!ALIASES_PS1_PS_PATH!' is already sourced in Powershell '!PROFILE_PS1_PATH!'."
 )
@@ -206,7 +210,7 @@ exit /b
   set SOURCE_FILE=%~1
   set BACKUP_FILE=%~1.%~2
 
-  if exist "%SOURCE_FILE%" ( 
+  if exist "%SOURCE_FILE%" (
     echo.
     echo Backing up "%SOURCE_FILE%" to "%BACKUP_FILE%"
     move "%SOURCE_FILE%" "%BACKUP_FILE%"
@@ -279,7 +283,7 @@ exit /b
   set status=%~1
   set message=%~2
   shift
-  
+
   if "%status%" == "0" (
     set color=%green%
   )
@@ -340,7 +344,7 @@ exit /b
   if exist "%cmder_root%\vendor\git-for-windows\usr\bin\find.exe" (
     set find_path="%cmder_root%\vendor\git-for-windows\usr\bin\find.exe"
   )
- 
+
   echo find=%find_path%
 
   if exist "%cmder_root%\vendor\git-for-windows\usr\bin\dos2unix.exe" (
@@ -355,13 +359,13 @@ exit /b
         echo Please wait converting required files to unix format...
         cd /d %~DP0
         echo %find_path% . -type f -name '*.sh' ^| xargs "%dos2unix_path%"
-        %find_path% . -type f -name '*.sh' | find -i -v "user_aliases.sh" | xargs "%dos2unix_path%"
-        
+        %find_path% . -type f -name '*.sh' | xargs "%dos2unix_path%" 2>nul
+
         echo %find_path% . -type f -name '*.vim' ^| xargs "%dos2unix_path%"
-        %find_path% . -type f -name '*.vim' | xargs "%dos2unix_path%"
-        
+        %find_path% . -type f -name '*.vim' | xargs "%dos2unix_path%" 2>nul
+
         echo %find_path% . -type f -name '*.vundle' ^| xargs "%dos2unix_path%"
-        %find_path% . -type f -name '*.vundle' | xargs "%dos2unix_path%"
+        %find_path% . -type f -name '*.vundle' | xargs "%dos2unix_path%" 2>nul
       )
     )
   ) else (

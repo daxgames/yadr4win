@@ -15,9 +15,6 @@
 	trustctime = false
 	editor = vim
 	filemode = false
-	autocrlf = false
-[credential]
-	helper = cache --timeout=3600
 [merge]
 	tool = vimdiff
 [mergetool]
@@ -115,5 +112,7 @@
   svnl = svn log --oneline --show-commit[format]
 [format]
   pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
+[credential "helperselector"]
+	selected = manager-core
 [include]
   path = .gitconfig.user

@@ -171,3 +171,4 @@ va=vim "%CMDER_ROOT%\config\user_aliases.cmd"
 vi=vim $*
 vimdiff=vim -d $*
 
+windowsterminal=D:\Users\296951\cmderdev\vendor\windows-terminal\windowsterminal.exe  

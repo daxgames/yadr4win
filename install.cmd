@@ -1,4 +1,4 @@
-@echo off
+@ECHO off
 
 setlocal enabledelayedexpansion
 set debug=0 ::This slows things down a lot if set to greater than 0
@@ -51,26 +51,26 @@ else
   call :debug_echo "%is_admin%" "You are running as Admin!"
 )
 
-call :is_hardlink "%USERPROFILE%\.vimrc" ".yadr4win\vimrc"
-if "%is_hardlink%" EQU "1" (
+call :is_symlink "%USERPROFILE%\.vimrc" ".yadr4win\vimrc"
+if "%is_symlink%" EQU "1" (
   call :do_backup "%USERPROFILE%\.vimrc" !BAK_EXT!
-  fsutil hardlink create "%USERPROFILE%\.vimrc" "%USERPROFILE%\.yadr4win\vimrc"
+  mklink "%USERPROFILE%\.vimrc" "%USERPROFILE%\.yadr4win\vimrc"
 ) else (
   echo -^> %USERPROFILE%\.vimrc is already hardlinked, nothing done.
 )
 
-call :is_hardlink "%USERPROFILE%\.gitconfig" ".yadr4win\git\gitconfig"
-if "%is_hardlink%" EQU "1" (
+call :is_symlink "%USERPROFILE%\.gitconfig" ".yadr4win\git\gitconfig"
+if "%is_symlink%" EQU "1" (
   call :do_backup "%USERPROFILE%\.gitconfig" !BAK_EXT!
-  fsutil hardlink create "%USERPROFILE%\.gitconfig" "%USERPROFILE%\.yadr4win\git\gitconfig"
+  mklink "%USERPROFILE%\.gitconfig" "%USERPROFILE%\.yadr4win\git\gitconfig"
 ) else (
   echo -^> %USERPROFILE%\.gitconfig is already hardlinked, nothing done.
 )
 
-call :is_hardlink "%USERPROFILE%\.tmux.conf" ".yadr4win\tmux\tmux.conf"
-if "%is_hardlink%" EQU "1" (
+call :is_symlink "%USERPROFILE%\.tmux.conf" ".yadr4win\tmux\tmux.conf"
+if "%is_symlink%" EQU "1" (
   CALL :do_backup "%USERPROFILE%\.tmux.conf" !BAK_EXT!
-  fsutil hardlink create "%USERPROFILE%\.tmux.conf" "%USERPROFILE%\.yadr4win\tmux\tmux.conf"
+  mklink "%USERPROFILE%\.tmux.conf" "%USERPROFILE%\.yadr4win\tmux\tmux.conf"
 ) else (
   echo -^> %USERPROFILE%\.tmux.conf is already hardlinked, nothing done.
 )
@@ -100,11 +100,11 @@ if not exist "%USERPROFILE%\.vim\bundle\vundle.vim" (
 echo.
 if defined CMDER_ROOT (
   echo CMDER was found, configuring it if necessary...
-  call :is_hardlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\cmder\user-Conemu.xml"
-  if "!is_hardlink!" EQU "1" (
+  call :is_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\cmder\user-Conemu.xml"
+  if "!is_symlink!" EQU "1" (
     echo here
     CALL :do_backup "%CMDER_ROOT%\config\user-ConEmu.xml" !BAK_EXT!
-    fsutil hardlink create "%CMDER_ROOT%\config\user-ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\user-ConEmu.xml"
+    mklink "%CMDER_ROOT%\config\user-ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\user-ConEmu.xml"
   ) else (
     echo -^> %CMDER_ROOT%\config\user-ConEmu.xml is already hardlinked, nothing done.
   )
@@ -128,19 +128,19 @@ if defined CMDER_ROOT (
   set PROFILE_PS1_PATH=%USERPROFILE%\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
 )
 
-call :is_hardlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
+call :is_symlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
 :: Need hardlink here because doskey.exe does not deal with softlinks
-if "%is_hardlink%" == "1" (
+if "%is_symlink%" == "1" (
   call :do_backup "!ALIASES_CMD_PATH!" !BAK_EXT!
-  fsutil hardlink create "!ALIASES_CMD_PATH!" "!USERPROFILE!\.yadr4win\user_aliases.cmd"
+  mklink "!ALIASES_CMD_PATH!" "!USERPROFILE!\.yadr4win\user_aliases.cmd"
 ) else (
   echo -^> !ALIASES_CMD_PATH! is already hard linked, nothing done.
 )
 
-call :is_hardlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
-if "%is_hardlink%" == "1" (
+call :is_symlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
+if "%is_symlink%" == "1" (
   call :do_backup "!ALIASES_PS1_PATH!" !BAK_EXT!
-  fsutil hardlink create "!ALIASES_PS1_PATH!" "!USERPROFILE!\.yadr4win\user_aliases.ps1"
+  mklink "!ALIASES_PS1_PATH!" "!USERPROFILE!\.yadr4win\user_aliases.ps1"
 ) else (
   echo -^> !ALIASES_PS1_PATH! is already hardlinked, nothing done.
 )
@@ -156,10 +156,10 @@ if "!ERRORLEVEL!" == "1" (
   call :debug_echo 0 "'!ALIASES_PS1_PS_PATH!' is already sourced in Powershell '!PROFILE_PS1_PATH!'."
 )
 
-call :is_hardlink "!ALIASES_SH_PATH!" ".yadr4win\\user_aliases.sh"
-if "%is_hardlink%" == "1" (
+call :is_symlink "!ALIASES_SH_PATH!" ".yadr4win\\user_aliases.sh"
+if "%is_symlink%" == "1" (
   CALL :do_backup "!ALIASES_SH_PATH!" !BAK_EXT!
-  fsutil hardlink create "!ALIASES_SH_PATH!" "!USERPROFILE!\.yadr4win\user_aliases.sh"
+  mklink "!ALIASES_SH_PATH!" "!USERPROFILE!\.yadr4win\user_aliases.sh"
 ) else (
   echo -^> !ALIASES_SH_PATH! is already hardlinked, nothing done.
 )
@@ -194,14 +194,14 @@ echo   "%userprofile%\.yadr4win\cleanup.cmd"
 echo.
 echo Verifying...
 set debug=1
-call :is_hardlink "%USERPROFILE%\.vimrc" ".yadr4win\\vimrc"
+call :is_symlink "%USERPROFILE%\.vimrc" ".yadr4win\\vimrc"
 call :is_dir_symlink "%USERPROFILE%\.vim" ".yadr4win\\vim"
-call :is_hardlink "%USERPROFILE%\.gitconfig" ".yadr4win\\git\\gitconfig"
-call :is_hardlink "%USERPROFILE%\.tmux.conf" ".yadr4win\\tmux\\tmux.conf"
-call :is_hardlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\\cmder\\user-Conemu.xml"
-call :is_hardlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
-call :is_hardlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
-call :is_hardlink "!ALIASES_SH_PATH!" ".yadr4win\\user_aliases.sh"
+call :is_symlink "%USERPROFILE%\.gitconfig" ".yadr4win\\git\\gitconfig"
+call :is_symlink "%USERPROFILE%\.tmux.conf" ".yadr4win\\tmux\\tmux.conf"
+call :is_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\\cmder\\user-Conemu.xml"
+call :is_symlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
+call :is_symlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
+call :is_symlink "!ALIASES_SH_PATH!" ".yadr4win\\user_aliases.sh"
 
 exit /b
 
@@ -301,7 +301,7 @@ exit /b
 
 :is_admin
   if exist "%TEMP%\test.tmp" del "%TEMP%\test.tmp"
-  fsutil hardlink create "%TEMP%\test.tmp" %~DP0README.md>nul
+  mklink "%TEMP%\test.tmp" %~DP0README.md>nul
   if "%ERRORLEVEL%" == "0" (
     if exist "%TEMP%\test.tmp" del "%TEMP%\test.tmp"
     set is_admin=0

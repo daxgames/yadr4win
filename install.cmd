@@ -1,4 +1,4 @@
-@echo off
+@ECHO off
 
 setlocal enabledelayedexpansion
 set debug=0 ::This slows things down a lot if set to greater than 0
@@ -195,10 +195,10 @@ echo   "%userprofile%\.yadr4win\cleanup.cmd"
 echo.
 echo Verifying...
 set debug=1
-call :is_symlink "%HOME%\.vimrc" ".yadr4win\\vimrc"
-call :is_dir_symlink "%HOME%\.vim" ".yadr4win\\vim"
-call :is_symlink "%HOME%\.gitconfig" ".yadr4win\\git\\gitconfig"
-call :is_symlink "%HOME%\.tmux.conf" ".yadr4win\\tmux\\tmux.conf"
+call :is_symlink "%USERPROFILE%\.vimrc" ".yadr4win\\vimrc"
+call :is_dir_symlink "%USERPROFILE%\.vim" ".yadr4win\\vim"
+call :is_symlink "%USERPROFILE%\.gitconfig" ".yadr4win\\git\\gitconfig"
+call :is_symlink "%USERPROFILE%\.tmux.conf" ".yadr4win\\tmux\\tmux.conf"
 call :is_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\\cmder\\user-Conemu.xml"
 call :is_symlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
 call :is_symlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
@@ -254,8 +254,18 @@ exit /b
   exit /b
 
 :create_symlink
-  if exist "%~1" ( del /y "%~1" )
-  mklink "%~1" "%~2"
+  if "%~1" == "/d" (
+    set mklink_args=%~1\
+    set mklink_source=%~2
+    set mklink_dest=%~3
+  ) else (
+    set mklink_source=%~1
+    set mklink_dest=%~2
+  )
+
+  if exist "%mklink_dest%" ( del /y "%mklink_dest%" )
+  
+  mklink %mklink_args% "%mklink_dest%" "%mklink_source%"
   exit /b
 
 :is_hardlink

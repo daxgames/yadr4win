@@ -55,7 +55,7 @@ else
 call :is_symlink "%HOME%\.vimrc" ".yadr4win\vimrc"
 if "%is_symlink%" EQU "1" (
   call :do_backup "%HOME%\.vimrc" !BAK_EXT! 
-  call :create_symlink "%HOME%\.vimrc" "%HOME%\.yadr4win\vimrc"
+  call :create_symlink "%HOME%\.yadr4win\vimrc" "%HOME%\.vimrc"
 ) else (
   echo -^> %HOME%\.vimrc is already hardlinked, nothing done.
 )
@@ -63,7 +63,7 @@ if "%is_symlink%" EQU "1" (
 call :is_symlink "%HOME%\.gitconfig" ".yadr4win\git\gitconfig"
 if "%is_symlink%" EQU "1" (
   call :do_backup "%HOME%\.gitconfig" !BAK_EXT! 
-  call :create_symlink "%HOME%\.gitconfig" "%HOME%\.yadr4win\git\gitconfig"
+  call :create_symlink "%HOME%\.yadr4win\git\gitconfig" "%HOME%\.gitconfig"
 ) else (
   echo -^> %HOME%\.gitconfig is already hardlinked, nothing done.
 )
@@ -71,7 +71,7 @@ if "%is_symlink%" EQU "1" (
 call :is_symlink "%HOME%\.tmux.conf" ".yadr4win\tmux\tmux.conf"
 if "%is_symlink%" EQU "1" (
   CALL :do_backup "%HOME%\.tmux.conf" !BAK_EXT! 
-  call :create_symlink "%HOME%\.tmux.conf" "%HOME%\.yadr4win\tmux\tmux.conf"
+  call :create_symlink "%HOME%\.yadr4win\tmux\tmux.conf" "%HOME%\.tmux.conf"
 ) else (
   echo -^> %HOME%\.tmux.conf is already hardlinked, nothing done.
 )
@@ -79,7 +79,7 @@ if "%is_symlink%" EQU "1" (
 call :is_dir_symlink "%HOME%\.vim" "%HOME:\=\\%\\.yadr4win\\vim"
 if "!is_symlink!" EQU "1" (
   CALL :do_backup "%HOME%\.vim" !BAK_EXT! 
-  call :create_symlink /d "%HOME%\.vim" "%HOME%\.yadr4win\vim"
+  call :create_symlink /d "%HOME%\.yadr4win\vim" "%HOME%\.vim"
 ) else (
   echo -^> %HOME%\.vim is already a symlink, nothing done.
 )
@@ -105,7 +105,7 @@ if defined CMDER_ROOT (
   if "!is_symlink!" EQU "1" (
     echo here
     CALL :do_backup "%CMDER_ROOT%\config\user-ConEmu.xml" !BAK_EXT! 
-    call :create_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" "%HOME%\.yadr4win\cmder\user-ConEmu.xml"
+    call :create_symlink "%HOME%\.yadr4win\cmder\user-ConEmu.xml" "%CMDER_ROOT%\config\user-ConEmu.xml"
   ) else (
     echo -^> %CMDER_ROOT%\config\user-ConEmu.xml is already hardlinked, nothing done.
   )
@@ -133,7 +133,7 @@ call :is_symlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
 :: Need hardlink here because doskey.exe does not deal with softlinks
 if "%is_symlink%" == "1" (
   call :do_backup "!ALIASES_CMD_PATH!" !BAK_EXT! 
-  call :create_symlink "!ALIASES_CMD_PATH!" "!HOME!\.yadr4win\user_aliases.cmd"
+  call :create_symlink "!HOME!\.yadr4win\user_aliases.cmd" "!ALIASES_CMD_PATH!"
 ) else (
   echo -^> !ALIASES_CMD_PATH! is already hard linked, nothing done.
 )
@@ -141,7 +141,7 @@ if "%is_symlink%" == "1" (
 call :is_symlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
 if "%is_symlink%" == "1" (
   call :do_backup "!ALIASES_PS1_PATH!" !BAK_EXT! 
-  call :create_symlink "!ALIASES_PS1_PATH!" "!HOME!\.yadr4win\user_aliases.ps1"
+  call :create_symlink "!HOME!\.yadr4win\user_aliases.ps1" "!ALIASES_PS1_PATH!"
 ) else (
   echo -^> !ALIASES_PS1_PATH! is already hardlinked, nothing done.
 )
@@ -160,7 +160,7 @@ if "!ERRORLEVEL!" == "1" (
 call :is_symlink "!ALIASES_SH_PATH!" ".yadr4win\\user_aliases.sh"
 if "%is_symlink%" == "1" (
   CALL :do_backup "!ALIASES_SH_PATH!" !BAK_EXT! 
-  call :create_symlink "!ALIASES_SH_PATH!" "!HOME!\.yadr4win\user_aliases.sh"
+  call :create_symlink "!HOME!\.yadr4win\user_aliases.sh" "!ALIASES_SH_PATH!"
 ) else (
   echo -^> !ALIASES_SH_PATH! is already hardlinked, nothing done.
 )
@@ -317,7 +317,7 @@ exit /b
 
 :is_dev_mode
   if exist "%TEMP%\test.tmp" del "%TEMP%\test.tmp"
-  call :create_symlink "%TEMP%\test.tmp" %~DP0README.md>nul
+  call :create_symlink %~DP0README.md "%TEMP%\test.tmp" >nul
   if "%ERRORLEVEL%" == "0" (
     if exist "%TEMP%\test.tmp" del "%TEMP%\test.tmp"
     set is_admin=0

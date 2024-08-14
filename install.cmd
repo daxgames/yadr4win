@@ -117,6 +117,11 @@ if defined CMDER_ROOT (
   set PROFILE_PS1_PATH=%CMDER_ROOT%\config\user_profile.ps1
   set ALIASES_PS1_PS_PATH=$env:CMDER_ROOT\config\user_aliases.ps1
   set PROFILE_PS1_PS_PS_PATH=$env:CMDER_ROOT\config\user_profile.ps1
+
+  curl -LkO https://github.com/dandavison/delta/releases/download/0.17.0/delta-0.17.0-x86_64-pc-windows-msvc.zip
+  unzip delta-0.17.0-x86_64-pc-windows-msvc.zip
+  mv delta-0.17.0-x86_64-pc-windows-msvc\delta.exe .\
+  rm delta-0.17.0-x86_64-pc-windows-msvc.zip
 ) else (
   set ALIASES_CMD_PATH=%USERPROFILE%\.user_aliases.cmd
   set ALIASES_SH_PATH=%USERPROFILE%\.user_aliases.sh

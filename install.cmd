@@ -52,6 +52,8 @@ else
   call :debug_echo "%is_admin%" "You are running as Admin or Developer Mode is enabled!"
 )
 
+set MSYS=winsymlinks:nativestict
+
 call :is_hardlink "%HOME%\.vimrc" ".yadr4win\vimrc"
 if "%is_hardlink%" EQU "1" (
   call :do_backup "%HOME%\.vimrc" !BAK_EXT! 

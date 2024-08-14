@@ -34,67 +34,68 @@ FOR /F "TOKENS=2" %%A IN ('ECHO %DATE%') DO @FOR /F "TOKENS=1,2,3 DELIMS=/" %%B 
 cd > "%TEMP%\curdir.txt"
 
 set /p workdir=<"%TEMP%\curdir.txt"
+if not defined HOME set "HOME=%USERPROFILE%"
 
-if not "%WORKDIR%" == "%USERPROFILE%\.yadr4win" (
-  if not exist "%USERPROFILE%\.yadr4win" md "%USERPROFILE%\.yadr4win"
+if not "%WORKDIR%" == "%HOME%\.yadr4win" (
+  if not exist "%HOME%\.yadr4win" md "%HOME%\.yadr4win"
 
-  xcopy /s /e "%~DP0*" "%USERPROFILE%\.yadr4win\"
+  xcopy /s /e "%~DP0*" "%HOME%\.yadr4win\"
 ) else (
-  echo "%WORKDIR%" == "%USERPROFILE%\.yadr4win"
+  echo "%WORKDIR%" == "%HOME%\.yadr4win"
 )
 
-call :is_admin
+call :is_dev_mode
 if "%is_admin%" == "1" (
-  call :debug_echo 3 "This script Must be run as Admin!"
+  call :debug_echo 3 "This script Must be run as Admin or Developer Mode must be enabled!"
   exit /b
 else
-  call :debug_echo "%is_admin%" "You are running as Admin!"
+  call :debug_echo "%is_admin%" "You are running as Admin or Developer Mode is enabled!"
 )
 
-call :is_hardlink "%USERPROFILE%\.vimrc" ".yadr4win\vimrc"
+call :is_hardlink "%HOME%\.vimrc" ".yadr4win\vimrc"
 if "%is_hardlink%" EQU "1" (
-  call :do_backup "%USERPROFILE%\.vimrc" !BAK_EXT! 
-  fsutil hardlink create "%USERPROFILE%\.vimrc" "%USERPROFILE%\.yadr4win\vimrc"
+  call :do_backup "%HOME%\.vimrc" !BAK_EXT! 
+  fsutil hardlink create "%HOME%\.vimrc" "%HOME%\.yadr4win\vimrc"
 ) else (
-  echo -^> %USERPROFILE%\.vimrc is already hardlinked, nothing done.
+  echo -^> %HOME%\.vimrc is already hardlinked, nothing done.
 )
 
-call :is_hardlink "%USERPROFILE%\.gitconfig" ".yadr4win\git\gitconfig"
+call :is_hardlink "%HOME%\.gitconfig" ".yadr4win\git\gitconfig"
 if "%is_hardlink%" EQU "1" (
-  call :do_backup "%USERPROFILE%\.gitconfig" !BAK_EXT! 
-  fsutil hardlink create "%USERPROFILE%\.gitconfig" "%USERPROFILE%\.yadr4win\git\gitconfig"
+  call :do_backup "%HOME%\.gitconfig" !BAK_EXT! 
+  fsutil hardlink create "%HOME%\.gitconfig" "%HOME%\.yadr4win\git\gitconfig"
 ) else (
-  echo -^> %USERPROFILE%\.gitconfig is already hardlinked, nothing done.
+  echo -^> %HOME%\.gitconfig is already hardlinked, nothing done.
 )
 
-call :is_hardlink "%USERPROFILE%\.tmux.conf" ".yadr4win\tmux\tmux.conf"
+call :is_hardlink "%HOME%\.tmux.conf" ".yadr4win\tmux\tmux.conf"
 if "%is_hardlink%" EQU "1" (
-  CALL :do_backup "%USERPROFILE%\.tmux.conf" !BAK_EXT! 
-  fsutil hardlink create "%USERPROFILE%\.tmux.conf" "%USERPROFILE%\.yadr4win\tmux\tmux.conf"
+  CALL :do_backup "%HOME%\.tmux.conf" !BAK_EXT! 
+  fsutil hardlink create "%HOME%\.tmux.conf" "%HOME%\.yadr4win\tmux\tmux.conf"
 ) else (
-  echo -^> %USERPROFILE%\.tmux.conf is already hardlinked, nothing done.
+  echo -^> %HOME%\.tmux.conf is already hardlinked, nothing done.
 )
 
-call :is_dir_symlink "%USERPROFILE%\.vim" "%USERPROFILE:\=\\%\\.yadr4win\\vim"
+call :is_dir_symlink "%HOME%\.vim" "%HOME:\=\\%\\.yadr4win\\vim"
 if "!is_symlink!" EQU "1" (
-  CALL :do_backup "%USERPROFILE%\.vim" !BAK_EXT! 
-  mklink /d "%USERPROFILE%\.vim" "%USERPROFILE%\.yadr4win\vim"
+  CALL :do_backup "%HOME%\.vim" !BAK_EXT! 
+  mklink /d "%HOME%\.vim" "%HOME%\.yadr4win\vim"
 ) else (
-  echo -^> %USERPROFILE%\.vim is already a symlink, nothing done.
+  echo -^> %HOME%\.vim is already a symlink, nothing done.
 )
 
-if not exist "%USERPROFILE%\.vim\bundle" (
-  echo mkdir "%USERPROFILE%\.vim\bundle"
-  mkdir "%USERPROFILE%\.vim\bundle"
+if not exist "%HOME%\.vim\bundle" (
+  echo mkdir "%HOME%\.vim\bundle"
+  mkdir "%HOME%\.vim\bundle"
 ) else (
-  echo -^> %USERPROFILE%\.vim\bundle is already created, nothing done.
+  echo -^> %HOME%\.vim\bundle is already created, nothing done.
 )
 
-if not exist "%USERPROFILE%\.vim\bundle\vundle.vim" (
+if not exist "%HOME%\.vim\bundle\vundle.vim" (
   echo Installing 'vundle.vim'...
-  git clone https://github.com/mihaigalos/Vundle.vim "%USERPROFILE%\.vim\bundle\vundle.vim"
+  git clone https://github.com/VundleVim/Vundle.vim.git "%HOME%\.vim\bundle\vundle.vim"
 ) else (
-  echo -^> %USERPROFILE%\.vim\bundle\vundle.vim is already installed, nothing done.
+  echo -^> %HOME%\.vim\bundle\vundle.vim is already installed, nothing done.
 )
 
 echo.
@@ -104,7 +105,7 @@ if defined CMDER_ROOT (
   if "!is_hardlink!" EQU "1" (
     echo here
     CALL :do_backup "%CMDER_ROOT%\config\user-ConEmu.xml" !BAK_EXT! 
-    fsutil hardlink create "%CMDER_ROOT%\config\user-ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\user-ConEmu.xml"
+    fsutil hardlink create "%CMDER_ROOT%\config\user-ConEmu.xml" "%HOME%\.yadr4win\cmder\user-ConEmu.xml"
   ) else (
     echo -^> %CMDER_ROOT%\config\user-ConEmu.xml is already hardlinked, nothing done.
   )
@@ -123,17 +124,17 @@ if defined CMDER_ROOT (
   mv delta-0.17.0-x86_64-pc-windows-msvc\delta.exe .\
   rm delta-0.17.0-x86_64-pc-windows-msvc.zip
 ) else (
-  set ALIASES_CMD_PATH=%USERPROFILE%\.user_aliases.cmd
-  set ALIASES_SH_PATH=%USERPROFILE%\.user_aliases.sh
-  set ALIASES_PS1_PATH=%USERPROFILE%\Documents\WindowsPowerShell\user_aliases.ps1
-  set PROFILE_PS1_PATH=%USERPROFILE%\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
+  set ALIASES_CMD_PATH=%HOME%\.user_aliases.cmd
+  set ALIASES_SH_PATH=%HOME%\.user_aliases.sh
+  set ALIASES_PS1_PATH=%HOME%\Documents\WindowsPowerShell\user_aliases.ps1
+  set PROFILE_PS1_PATH=%HOME%\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
 )
 
 call :is_hardlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
 :: Need hardlink here because doskey.exe does not deal with softlinks
 if "%is_hardlink%" == "1" (
   call :do_backup "!ALIASES_CMD_PATH!" !BAK_EXT! 
-  fsutil hardlink create "!ALIASES_CMD_PATH!" "!USERPROFILE!\.yadr4win\user_aliases.cmd"
+  fsutil hardlink create "!ALIASES_CMD_PATH!" "!HOME!\.yadr4win\user_aliases.cmd"
 ) else (
   echo -^> !ALIASES_CMD_PATH! is already hard linked, nothing done.
 )
@@ -141,7 +142,7 @@ if "%is_hardlink%" == "1" (
 call :is_hardlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
 if "%is_hardlink%" == "1" (
   call :do_backup "!ALIASES_PS1_PATH!" !BAK_EXT! 
-  fsutil hardlink create "!ALIASES_PS1_PATH!" "!USERPROFILE!\.yadr4win\user_aliases.ps1"
+  fsutil hardlink create "!ALIASES_PS1_PATH!" "!HOME!\.yadr4win\user_aliases.ps1"
 ) else (
   echo -^> !ALIASES_PS1_PATH! is already hardlinked, nothing done.
 )
@@ -160,21 +161,21 @@ if "!ERRORLEVEL!" == "1" (
 call :is_hardlink "!ALIASES_SH_PATH!" ".yadr4win\\user_aliases.sh"
 if "%is_hardlink%" == "1" (
   CALL :do_backup "!ALIASES_SH_PATH!" !BAK_EXT! 
-  fsutil hardlink create "!ALIASES_SH_PATH!" "!USERPROFILE!\.yadr4win\user_aliases.sh"
+  fsutil hardlink create "!ALIASES_SH_PATH!" "!HOME!\.yadr4win\user_aliases.sh"
 ) else (
   echo -^> !ALIASES_SH_PATH! is already hardlinked, nothing done.
 )
 
 echo.
 set do_gitconfig.user=0
-if not exist "%USERPROFILE%\.gitconfig.user" (
+if not exist "%HOME%\.gitconfig.user" (
   set do_gitconfig.user=8
 ) else (
-  type "%USERPROFILE%\.gitconfig.user" | findstr /i /R /C:"^\[user\]$">nul
+  type "%HOME%\.gitconfig.user" | findstr /i /R /C:"^\[user\]$">nul
   if !ERRORLEVEL! GTR 0 ( set /a do_gitconfig.user+=4 )
-  type "%USERPROFILE%\.gitconfig.user" | findstr /i /R /C:"^ *name *= *[a-z]*.*$">nul
+  type "%HOME%\.gitconfig.user" | findstr /i /R /C:"^ *name *= *[a-z]*.*$">nul
   if !ERRORLEVEL! GTR 0 ( set /a do_gitconfig.user+=2 )
-  type "%USERPROFILE%\.gitconfig.user" | findstr /i /r /c:"^ *email *= .*@.*$">nul
+  type "%HOME%\.gitconfig.user" | findstr /i /r /c:"^ *email *= .*@.*$">nul
   if !ERRORLEVEL! GTR 0 ( set /a do_gitconfig.user+=1 )
 
   if "%do_gitconfig.user%" == "8" (
@@ -190,15 +191,15 @@ echo.
 echo All files that were not linked to .yadr4win files were backed up with a "[FILENAME].%BAK_EXT%".
 echo.
 echo If you are sure you have not lost anything you can clean these up by typing the following:
-echo   "%userprofile%\.yadr4win\cleanup.cmd"
+echo   "%HOME%\.yadr4win\cleanup.cmd"
 
 echo.
 echo Verifying...
 set debug=1
-call :is_hardlink "%USERPROFILE%\.vimrc" ".yadr4win\\vimrc"
-call :is_dir_symlink "%USERPROFILE%\.vim" ".yadr4win\\vim"
-call :is_hardlink "%USERPROFILE%\.gitconfig" ".yadr4win\\git\\gitconfig"
-call :is_hardlink "%USERPROFILE%\.tmux.conf" ".yadr4win\\tmux\\tmux.conf"
+call :is_hardlink "%HOME%\.vimrc" ".yadr4win\\vimrc"
+call :is_dir_symlink "%HOME%\.vim" ".yadr4win\\vim"
+call :is_hardlink "%HOME%\.gitconfig" ".yadr4win\\git\\gitconfig"
+call :is_hardlink "%HOME%\.tmux.conf" ".yadr4win\\tmux\\tmux.conf"
 call :is_hardlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\\cmder\\user-Conemu.xml"
 call :is_hardlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
 call :is_hardlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
@@ -243,7 +244,7 @@ exit /b
 
 :is_symlink
   set symlink=%~1
-   set symlink_target=%~2
+  set symlink_target=%~2
 
   echo.
   echo Checking for "!symlink!" symlink...
@@ -283,7 +284,7 @@ exit /b
   set status=%~1
   set message=%~2
   shift
-  
+
   if "%status%" == "0" (
     set color=%green%
   )
@@ -300,7 +301,7 @@ exit /b
 
   exit /b
 
-:is_admin
+:is_dev_mode
   if exist "%TEMP%\test.tmp" del "%TEMP%\test.tmp"
   fsutil hardlink create "%TEMP%\test.tmp" %~DP0README.md>nul
   if "%ERRORLEVEL%" == "0" (
@@ -318,21 +319,21 @@ exit /b
 :do_gitconfig.user
   echo We need to setup your user Git configuration so your commits are attributed to you.
   echo.
-  echo All custom user Git configuration should go in "%USERPROFILE%\.gitconfig.user"
+  echo All custom user Git configuration should go in "%HOME%\.gitconfig.user"
   echo.
 
   set /p "user.name=Type Your Name: "
   set /p "user.email=Type Your Email Address: "
 
   if "%user.name%" neq "" if "%user.email%" neq "" (
-    CALL :do_backup "%USERPROFILE%\.gitconfig.user !BAK_EXT! 
-    echo [user]>"%USERPROFILE%\.gitconfig.user"
-    echo   name = %user.name%>>"%USERPROFILE%\.gitconfig.user
-    echo   email = %user.email%>>"%USERPROFILE%\.gitconfig.user
+    CALL :do_backup "%HOME%\.gitconfig.user !BAK_EXT! 
+    echo [user]>"%HOME%\.gitconfig.user"
+    echo   name = %user.name%>>"%HOME%\.gitconfig.user
+    echo   email = %user.email%>>"%HOME%\.gitconfig.user
 
     if %do_gitconfig.user% GEQ 1 if %do_gitconfig.user% LEQ 7 (
-      type "%USERPROFILE%\.gitconfig.user.bak" | Findstr /v /i /R /C:"^\n$" | Findstr /v /i /R /C:"^\[user\]$" | findstr /v /i /R /C:"^ *name *= *[a-z]*.*$" | findstr /v /i /r /c:"^ *email *= *[a-z]*@.*$" >> "%USERPROFILE%\.gitconfig.user"
-      del "%USERPROFILE%\.gitconfig.user.bak"
+      type "%HOME%\.gitconfig.user.bak" | Findstr /v /i /R /C:"^\n$" | Findstr /v /i /R /C:"^\[user\]$" | findstr /v /i /R /C:"^ *name *= *[a-z]*.*$" | findstr /v /i /r /c:"^ *email *= *[a-z]*@.*$" >> "%HOME%\.gitconfig.user"
+      del "%HOME%\.gitconfig.user.bak"
     )
     echo User git config is done.
   ) else (
@@ -344,7 +345,7 @@ exit /b
   if exist "%cmder_root%\vendor\git-for-windows\usr\bin\find.exe" (
     set find_path="%cmder_root%\vendor\git-for-windows\usr\bin\find.exe"
   )
- 
+
   echo find=%find_path%
 
   if exist "%cmder_root%\vendor\git-for-windows\usr\bin\dos2unix.exe" (
@@ -360,10 +361,10 @@ exit /b
         cd /d %~DP0
         echo %find_path% . -type f -name '*.sh' ^| xargs "%dos2unix_path%"
         %find_path% . -type f -name '*.sh' | xargs "%dos2unix_path%" 2>nul
-        
+
         echo %find_path% . -type f -name '*.vim' ^| xargs "%dos2unix_path%"
         %find_path% . -type f -name '*.vim' | xargs "%dos2unix_path%" 2>nul
-        
+
         echo %find_path% . -type f -name '*.vundle' ^| xargs "%dos2unix_path%"
         %find_path% . -type f -name '*.vundle' | xargs "%dos2unix_path%" 2>nul
       )

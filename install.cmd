@@ -112,6 +112,10 @@ if defined CMDER_ROOT (
     echo -^> %CMDER_ROOT%\config\user-ConEmu.xml is already hardlinked, nothing done.
   )
 
+  echo Updating Cmder 'conemu.xml' with our version...
+  CALL :do_backup "%CMDER_ROOT%\vendor\conemu-maximus5\ConEmu.xml" !BAK_EXT!
+  cp "%CMDER_ROOT%\config\user-ConEmu.xml" "%CMDER_ROOT%\vendor\conemu-maximus5\ConEmu.xml"
+
   set ALIASES_CMD_PATH=%CMDER_ROOT%\config\user_aliases.cmd
   set PROFILE_CMD_PATH=%CMDER_ROOT%\config\user_profile.cmd
   set ALIASES_SH_PATH=%CMDER_ROOT%\config\user_aliases.sh
@@ -257,6 +261,21 @@ exit /b
   set "is_symlink=%errorlevel%"
   REM call :debug_echo %is_symlink%:%symlink%
   call :debug_echo !is_symlink! "%symlink%"
+  exit /b
+
+:create_symlink
+  if "%~1" == "/d" (
+    set mklink_args=%~1\
+    set mklink_source=%~2
+    set mklink_dest=%~3
+  ) else (
+    set mklink_source=%~1
+    set mklink_dest=%~2
+  )
+
+  if exist "%mklink_dest%" ( del /y "%mklink_dest%" )
+  
+  mklink %mklink_args% "%mklink_dest%" "%mklink_source%"
   exit /b
 
 :is_hardlink

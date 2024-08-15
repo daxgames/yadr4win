@@ -1,3 +1,5 @@
+# set your user tokens as environment variables, such as ~/.secrets
+# See the README for examples.
 [color]
   ui = true
 [color "branch"]
@@ -9,30 +11,14 @@
   frag = magenta bold
   old = red
   new = green
-[push]
-	default = matching
-[core]
-	trustctime = false
-	editor = vim
-	filemode = false
-[merge]
-	tool = vimdiff
-[mergetool]
-	keeptemporaries = false
-	keepbackups = false
-	prompt = false
-	trustexitcode = false
 [alias]
-  #git subtrees
-	sba = "!f(){ git subtree add --prefix=$2 $1 master --squash; }; f"
-	sbu = "!f(){ git subtree pull --prefix=$2 $1 master --squash; }; f"
-	sbp = "!f(){ git subtree push --prefix=$1 $2 $3; }; f"
-  
   # add
   a = add                           # add
   chunkyadd = add --patch           # stage commits chunk by chunk
+  # Shows list of contributors of a repository.
+  contributors = shortlog --summary --numbered --email
 
-  # via http://blog.apiaxle.com/post/handy-git-tips-to-stop-you-getting-fired/
+  # via http://philjackson.github.io/2013/04/07/handy-git-tips-to-stop-you-getting-fired.html
   snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
   snapshots = !git stash list --grep snapshot
 
@@ -41,14 +27,18 @@
 
   # branch
   b = branch -v                     # branch (verbose)
-	br = branch
+  ren-remote = "!f() { git push origin origin/$1:refs/heads/$2 :$1; } ; f"
+  ren-local = branch -m
+  ren = !git ren-local $1 $2 && git ren-remote $1 $2
 
   # commit
   c = commit -m                     # commit with message
   ca = commit -am                   # commit all with message
   ci = commit                       # commit
   amend = commit --amend            # ammend your last commit
+  amend-noedit = commit --amend --no-edit #amend your last commit reusing last commit's message
   ammend = commit --amend           # ammend your last commit
+  ammend-noedit = commit --amend --no-edit #amend your last commit reusing last commit's message
 
   # checkout
   co = checkout                     # checkout
@@ -56,9 +46,6 @@
 
   # cherry-pick
   cp = cherry-pick -x               # grab a change from a branch
-
-  #clone
-	cl = clone
 
   # diff
   d = diff                          # diff unstaged changes
@@ -71,7 +58,6 @@
   short = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\"
   simple = log --pretty=format:\" * %s\"
   shortnocolor = log --pretty=format:\"%h %cr %cn %s\"
-  last = log -1 --stat
 
   # pull
   pl = pull                         # pull
@@ -109,10 +95,78 @@
   # svn helpers
   svnr = svn rebase
   svnd = svn dcommit
-  svnl = svn log --oneline --show-commit[format]
+  svnl = svn log --oneline --show-commit
 [format]
   pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
-[credential "helperselector"]
-	selected = manager-core
+[mergetool]
+  prompt = false
+  keepBackup = false
+[mergetool "vimdiff"]
+  cmd="vim -d -c 'Gvdiffsplit' $MERGED"     # use fugitive.vim for 3-way merge
+  keepbackup=false
+[merge]
+  summary = true
+  verbosity = 1
+  tool = mvimdiff
+[apply]
+  whitespace = nowarn
+[branch]
+  autosetupmerge = true
+[push]
+  # 'git push' will push the current branch to its tracking branch
+  # the usual default is to push all branches
+  default = upstream
+[core]
+  autocrlf = false
+  editor = vim
+  excludesfile = ~/.yadr/git/gitignore
+  attributesFile = ~/.yadr/git/gitattributes
+[advice]
+  statusHints = false
+[diff]
+  # Git diff will use (i)ndex, (w)ork tree, (c)ommit and (o)bject
+  # instead of a/b/c/d as prefixes for patches
+  mnemonicprefix = true
+  algorithm = patience
+  compactionHeuristic = true
+  colorMoved = default
+# [diff "spaceman-diff"]
+#   command = "spaceman-diff"
+[rerere]
+  # Remember my merges
+  # http://gitfu.wordpress.com/2008/04/20/git-rerere-rereremember-what-you-did-last-time/
+  enabled = true
+[pager]
+  diff = "delta"
+  show = "delta"
+  reflog = "delta"
+  show = "delta"
+[delta]
+  # syntax-theme = gruvbox-dark
+  navigate = true
+  side-by-side = true
+  line-numbers = true
+
+  commit-decoration-style = blue ol
+  commit-style = raw
+  file-style = omit
+  hunk-header-decoration-style = blue box
+  hunk-header-file-style = red
+  hunk-header-line-number-style = "#067a00"
+  hunk-header-style = file line-number syntax
+  dark = true
+  # minus-emph-style = normal "#ffc0c0"
+  # minus-empty-line-marker-style = normal "#ffe0e0"
+  # minus-non-emph-style = normal "#ffe0e0"
+  # minus-style = normal "#ffe0e0"
+  # plus-emph-style = syntax "#a0efa0"
+  # plus-empty-line-marker-style = normal "#d0ffd0"
+  # plus-non-emph-style = syntax "#d0ffd0"
+  # plus-style = syntax "#d0ffd0"
+  zero-style = syntax
+[interactive]
+  diffFilter = delta --color-only
+[init]
+	defaultBranch = main
 [include]
   path = .gitconfig.user

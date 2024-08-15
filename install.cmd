@@ -131,6 +131,11 @@ if defined CMDER_ROOT (
   unzip delta-0.17.0-x86_64-pc-windows-msvc.zip
   mv delta-0.17.0-x86_64-pc-windows-msvc\delta.exe .\
   rm delta-0.17.0-x86_64-pc-windows-msvc.zip
+  curl -LkO https://github.com/cli/cli/releases/download/v2.54.0/gh_2.54.0_windows_amd64.zip
+  unzip gh_2.54.0_windows_amd64.zip
+  mv bin\gh.exe ./
+  rm -rf bin
+  rm -f gh_2.54.0_windows_amd64.zip
   cd /d "%workdir%"
 ) else (
   set ALIASES_CMD_PATH=%HOME%\.user_aliases.cmd

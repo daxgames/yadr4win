@@ -189,3 +189,5 @@ if !isdirectory(expand('./').'/.git')
   set grepprg=ag
   let g:grep_cmd_opts = '--line-numbers --noheading'
 endif
+
+let g:copilot_browser = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"

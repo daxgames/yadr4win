@@ -172,8 +172,8 @@ set diffopt=vertical
 autocmd FileType ruby,eruby set filetype=ruby.eruby.chef shiftwidth=4 tabstop=4 expandtab
 autocmd FileType groovy set filetype=groovy shiftwidth=4 tabstop=4 expandtab
 
-" fix git gutter errors
-set shell=/usr/bin/zsh
+" " fix git gutter errors
+" set shell=/usr/bin/zsh
 
 set clipboard=unnamedplus
 

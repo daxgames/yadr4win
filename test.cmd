@@ -82,7 +82,7 @@ call :is_symlink "%ALIASES_SH_PATH%" ".yadr4win\\user_aliases.sh"
   dir !symlink! | findstr /i "symlink" | findstr /i "!symlink_target!" >nul
   set "is_symlink=%errorlevel%"
   REM call :debug_echo %is_symlink%:%symlink%
-  echo "%symlink%: %is_symlink%
+  echo %symlink%: %is_symlink%
   rem call :debug_echo !is_symlink! "%symlink%"
   exit /b
 
@@ -96,7 +96,7 @@ call :is_symlink "%ALIASES_SH_PATH%" ".yadr4win\\user_aliases.sh"
   echo dir !symlink!\.. ^| findstr /i "symlinkd" ^| findstr /i /c:" %symlink_name% " ^| findstr /r "[!symlink_target!]"
   dir !symlink!\.. | findstr /i "symlinkd" | findstr /i /c:" %symlink_name% " | findstr /r "[!symlink_target!]">nul
   set "is_symlink=%errorlevel%"
-  echo "%symlink%: %is_symlink%
+  echo %symlink%: %is_symlink%
   rem call :debug_echo !is_symlink! "%symlink%"
   exit /b
 

@@ -54,26 +54,26 @@ else
 
 set MSYS=winsymlinks:nativestict
 
-call :is_hardlink "%HOME%\.vimrc" ".yadr4win\vimrc"
-if "%is_hardlink%" EQU "1" (
+call :is_symlink "%HOME%\.vimrc" ".yadr4win\vimrc"
+if "%is_symlink%" EQU "1" (
   call :do_backup "%HOME%\.vimrc" !BAK_EXT! 
-  fsutil hardlink create "%HOME%\.vimrc" "%HOME%\.yadr4win\vimrc"
+  ln -nsf "%HOME%\.yadr4win\vimrc" "%HOME%\.vimrc"
 ) else (
   echo -^> %HOME%\.vimrc is already hardlinked, nothing done.
 )
 
-call :is_hardlink "%HOME%\.gitconfig" ".yadr4win\git\gitconfig"
-if "%is_hardlink%" EQU "1" (
+call :is_symlink "%HOME%\.gitconfig" ".yadr4win\git\gitconfig"
+if "%is_symlink%" EQU "1" (
   call :do_backup "%HOME%\.gitconfig" !BAK_EXT! 
-  fsutil hardlink create "%HOME%\.gitconfig" "%HOME%\.yadr4win\git\gitconfig"
+  ln -nsf "%HOME%\.yadr4win\git\gitconfig" "%HOME%\.gitconfig"
 ) else (
   echo -^> %HOME%\.gitconfig is already hardlinked, nothing done.
 )
 
-call :is_hardlink "%HOME%\.tmux.conf" ".yadr4win\tmux\tmux.conf"
-if "%is_hardlink%" EQU "1" (
+call :is_symlink "%HOME%\.tmux.conf" ".yadr4win\tmux\tmux.conf"
+if "%is_symlink%" EQU "1" (
   CALL :do_backup "%HOME%\.tmux.conf" !BAK_EXT! 
-  fsutil hardlink create "%HOME%\.tmux.conf" "%HOME%\.yadr4win\tmux\tmux.conf"
+  ln -nsf "%HOME%\.yadr4win\tmux\tmux.conf" "%HOME%\.tmux.conf"
 ) else (
   echo -^> %HOME%\.tmux.conf is already hardlinked, nothing done.
 )
@@ -81,7 +81,7 @@ if "%is_hardlink%" EQU "1" (
 call :is_dir_symlink "%HOME%\.vim" "%HOME:\=\\%\\.yadr4win\\vim"
 if "!is_symlink!" EQU "1" (
   CALL :do_backup "%HOME%\.vim" !BAK_EXT! 
-  mklink /d "%HOME%\.vim" "%HOME%\.yadr4win\vim"
+  ln -nsf "%HOME%\.yadr4win\vim" "%HOME%\.vim"
 ) else (
   echo -^> %HOME%\.vim is already a symlink, nothing done.
 )
@@ -103,11 +103,11 @@ if not exist "%HOME%\.vim\bundle\vundle.vim" (
 echo.
 if defined CMDER_ROOT (
   echo CMDER was found, configuring it if necessary...
-  call :is_hardlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\cmder\user-Conemu.xml"
-  if "!is_hardlink!" EQU "1" (
+  call :is_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\cmder\user-Conemu.xml"
+  if "!is_symlink!" EQU "1" (
     echo here
     CALL :do_backup "%CMDER_ROOT%\config\user-ConEmu.xml" !BAK_EXT! 
-    fsutil hardlink create "%CMDER_ROOT%\config\user-ConEmu.xml" "%HOME%\.yadr4win\cmder\user-ConEmu.xml"
+    ln -nsf "%HOME%\.yadr4win\cmder\user-ConEmu.xml" "%CMDER_ROOT%\config\user-ConEmu.xml"
   ) else (
     echo -^> %CMDER_ROOT%\config\user-ConEmu.xml is already hardlinked, nothing done.
   )
@@ -144,19 +144,19 @@ if defined CMDER_ROOT (
   set PROFILE_PS1_PATH=%HOME%\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
 )
 
-call :is_hardlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
+call :is_symlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
 :: Need hardlink here because doskey.exe does not deal with softlinks
-if "%is_hardlink%" == "1" (
+if "%is_symlink%" == "1" (
   call :do_backup "!ALIASES_CMD_PATH!" !BAK_EXT! 
-  fsutil hardlink create "!ALIASES_CMD_PATH!" "!HOME!\.yadr4win\user_aliases.cmd"
+  ln -nsf "!HOME!\.yadr4win\user_aliases.cmd" "!ALIASES_CMD_PATH!"
 ) else (
   echo -^> !ALIASES_CMD_PATH! is already hard linked, nothing done.
 )
 
-call :is_hardlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
-if "%is_hardlink%" == "1" (
+call :is_symlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
+if "%is_symlink%" == "1" (
   call :do_backup "!ALIASES_PS1_PATH!" !BAK_EXT! 
-  fsutil hardlink create "!ALIASES_PS1_PATH!" "!HOME!\.yadr4win\user_aliases.ps1"
+  ln -nsf "!HOME!\.yadr4win\user_aliases.ps1" "!ALIASES_PS1_PATH!"
 ) else (
   echo -^> !ALIASES_PS1_PATH! is already hardlinked, nothing done.
 )
@@ -165,17 +165,17 @@ echo "Checking '!ALIASES_PS1_PS_PATH!' is sourced in Powershell '!PROFILE_PS1_PA
 rem echo type "!PROFILE_PS1_PATH!" ^| findstr /i /r /c:"^^. !ALIASES_PS1_PS_PATH:\=\\!"
 type "!PROFILE_PS1_PATH!" | findstr /i /r /c:"^. \"!ALIASES_PS1_PS_PATH:\=\\!\"">nul
 if "!ERRORLEVEL!" == "1" (
-  REM CALL :do_backup "!PROFILE_PS1_PATH!" !BAK_EXT! 
+  REM CALL :do_backup "!PROFILE_PS1_PATH!" !BAK_EXT!
   echo "Sourcing '!ALIASES_PS1_PS_PATH!' in Powershell '!PROFILE_PS1_PATH!'"
   echo . "!ALIASES_PS1_PS_PATH!" >> "!PROFILE_PS1_PATH!"
 ) else (
   call :debug_echo 0 "'!ALIASES_PS1_PS_PATH!' is already sourced in Powershell '!PROFILE_PS1_PATH!'."
 )
 
-call :is_hardlink "!ALIASES_SH_PATH!" ".yadr4win\\user_aliases.sh"
-if "%is_hardlink%" == "1" (
+call :is_symlink "!ALIASES_SH_PATH!" ".yadr4win\\user_aliases.sh"
+if "%is_symlink%" == "1" (
   CALL :do_backup "!ALIASES_SH_PATH!" !BAK_EXT! 
-  fsutil hardlink create "!ALIASES_SH_PATH!" "!HOME!\.yadr4win\user_aliases.sh"
+  ln -nsf "!HOME!\.yadr4win\user_aliases.sh" "!ALIASES_SH_PATH!"
 ) else (
   echo -^> !ALIASES_SH_PATH! is already hardlinked, nothing done.
 )
@@ -210,14 +210,14 @@ echo   "%HOME%\.yadr4win\cleanup.cmd"
 echo.
 echo Verifying...
 set debug=1
-call :is_hardlink "%HOME%\.vimrc" ".yadr4win\\vimrc"
+call :is_symlink "%HOME%\.vimrc" ".yadr4win\\vimrc"
 call :is_dir_symlink "%HOME%\.vim" ".yadr4win\\vim"
-call :is_hardlink "%HOME%\.gitconfig" ".yadr4win\\git\\gitconfig"
-call :is_hardlink "%HOME%\.tmux.conf" ".yadr4win\\tmux\\tmux.conf"
-call :is_hardlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\\cmder\\user-Conemu.xml"
-call :is_hardlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
-call :is_hardlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
-call :is_hardlink "!ALIASES_SH_PATH!" ".yadr4win\\user_aliases.sh"
+call :is_symlink "%HOME%\.gitconfig" ".yadr4win\\git\\gitconfig"
+call :is_symlink "%HOME%\.tmux.conf" ".yadr4win\\tmux\\tmux.conf"
+call :is_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\\cmder\\user-Conemu.xml"
+call :is_symlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
+call :is_symlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
+call :is_symlink "!ALIASES_SH_PATH!" ".yadr4win\\user_aliases.sh"
 
 exit /b
 
@@ -225,7 +225,7 @@ exit /b
   set SOURCE_FILE=%~1
   set BACKUP_FILE=%~1.%~2
 
-  if exist "%SOURCE_FILE%" ( 
+  if exist "%SOURCE_FILE%" (
     echo.
     echo Backing up "%SOURCE_FILE%" to "%BACKUP_FILE%"
     move "%SOURCE_FILE%" "%BACKUP_FILE%"
@@ -332,7 +332,7 @@ exit /b
 
 :is_dev_mode
   if exist "%TEMP%\test.tmp" del "%TEMP%\test.tmp"
-  fsutil hardlink create "%TEMP%\test.tmp" %~DP0README.md>nul
+  ln -nsf %~DP0README.md "%TEMP%\test.tmp" >nul
   if "%ERRORLEVEL%" == "0" (
     if exist "%TEMP%\test.tmp" del "%TEMP%\test.tmp"
     set is_admin=0

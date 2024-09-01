@@ -9,6 +9,7 @@
 ~=cd /d %USERPROFILE%
 apm="%CMDER_ROOT%\vendor\atom\Atom\resources\app\apm\bin\apm $*"
 atom="%CMDER_ROOT%\vendor\atom\Atom\atom $*"
+bcompare="%CMDER_ROOT%\bin\BeyondCompare4\BCompare.exe"  
 
 clear=cls
 cmderr=cd %cmder_root%

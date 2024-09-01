@@ -1,10 +1,8 @@
 @echo off
 
-setlocal enabledelayedexpansion
-set debug=0 ::This slows things down a lot if set to greater than 0
-if exist "%cmder_root%\vendor\git-for-windows" (
-  set cmder_full=1
-)
+if [[ -d "$CMDER_ROOT/vendor/git-for-windows" ]] ; them
+  export CMDER_FULL=1
+fi
 
 if not "%~1" == "" call :%~1 & exit /b
 

@@ -149,7 +149,6 @@ ls=ls --show-control-chars -F --color $*
 myrepo=git remote -v $b grep origin $b head -n 1 $b cut -f 2 $b cut -d ' ' -f 1 $g %temp%\repo.tmp $t unix2dos %temp%\repo.tmp 2$lnull $t sleep 1 $t set /p x=$l%temp%\repo.tmp $t start /b %x%
 myupstream=git remote -v $b grep upstream $b head -n 1 $b cut -f 2 $b cut -d ' ' -f 1 $g %temp%\repo.tmp $t unix2dos %temp%\repo.tmp 2$lnull $t sleep 1 $t set /p x=$l%temp%\repo.tmp $t start /b %x%
 np=notepad $*
-nvim="%CMDER_ROOT%\bin\neovim\bin\nvim.exe" $*
 pip=python -m pip $*
 portabletools="%CMDER_ROOT%\bin\brute-framework\start.bat" $*alias portabletools="%CMDER_ROOT%\bin\brute-framework\start.bat" $*exit  
 pwd=cd
@@ -172,4 +171,5 @@ vi=vim $*
 vimdiff=vim -d $*
 windowsterminal=D:\Users\296951\cmderdev\vendor\windows-terminal\windowsterminal.exe
 cat=bat.exe $*
-np+="C:\Program Files\Notepad++\notepad++.exe" $*  
+nvim=nvim.exe $*  
+vim=nvim $*  

@@ -1,0 +1,834 @@
+|CTAG_1723204255_259546_9064_0
+cmder /a
+start config
+cmder /task mintty
+cmd /?
+start /?
+vim 
+ls -la ~/.vim
+|s -la ~/
+|s -la
+|s -la ~/
+|d C:\Users\vagrant\.yadr4win\
+|s
+|s
+|it status
+|it diff
+|s
+git branch -a
+|d
+|d 
+|d ~/
+|d C:\Users\vagrant\
+git clone https://github.com/daxgames/yadr4win .yadr4win
+|d .yadr4win
+|s
+|nstall.cmd
+cd ~
+cd C:\Users\vagrant\
+|s -la
+|s
+|s
+|l
+|d .yadr4win
+|s
+ls vim
+|s -la
+|s -la vim
+ls -la vim
+|s -la ~/
+|im install.cmd
+|im install.cmd
+|nstall.cmd
+|im
+ls C:\Users\vagrant\.vim\bundle\vundle.vim\
+vim C:\Users\vagrant\.vimrc
+ls -la ~/.
+rm -rf C:\Users\vagrant\.vim
+rm -rf C:\Users\vagrant\.vim.yadr4win.20240811_125708.80\
+|im install.cmd
+|/install
+|nstall.cmd
+|s -la ~/
+rm -rf ~/.vim
+noetpad install.cmd
+notepad install.cmd
+|it status
+|it diff
+git checkout *
+git checkout -b dev
+|it push -u origin/dev
+|im install.cmd
+git checkout main
+|it status
+git branch -a
+git checkout master
+|it diff
+|nstall.cmd
+|s -la ~/
+|s
+|d bin
+ls ..\opt\bc5\
+ln -sf ..\opt\bc5\BComp.exe bcomp.exe
+|l
+copy vendor\cmder_exinit "C:\Program Files\Git\etc\profile.d\cmder_exinit.sh
+rm "C:\Program Files\Git\etc\profile.d\cmder_exinit.sh
+ln -sf vendor\cmder_exinit "C:\Program Files\Git\etc\profile.d\cmder_exinit.sh"
+dir  "C:\Program Files\Git\etc\profile.d"
+|s
+|im config\user_profile.cmd 
+|s
+vim C:\Users\vagrant\.vim\vundles\git.vundle 
+|s
+|im
+|link update
+|im C:\Users\vagrant\.yadr4win\install.cmd
+vim C:\Users\vagrant\.yadr4win\install.cmd
+|im C:\Users\vagrant\.vimrc.after
+|im C:\Users\vagrant\.vimrc.after
+vim C:\Users\vagrant\.vimrc.after
+|s
+|d C:\Users\vagrant\.yadr4win\
+|s
+|d
+|d 
+cd ~/cmderdev
+cd C:\Users\vagrant\cmderdev\
+|s
+vim config\user_init.cmd 
+|s -la config\
+|m config\user_init.cmd 
+rm config\user_init.cmd 
+del config\user_init.cmd 
+npm
+node --version
+|im
+|d ~/src
+mkdir ~/src
+md C:\Users\vagrant\src
+cd C:/Users/vagrant/src/
+git clone --mirror https://github.com/daxgames/yadr4win
+|d yadr4win.git\
+|l
+cat config 
+git worktree add master
+|it worktree add --checkout dev origin/dev
+|it fetch
+|it fetch origin
+|d C:\Users\vagrant\.yadr4win\
+|s
+|a
+|cm "Add Copilot"
+git config --global user.email "dtgames@kinggeek.org"
+git config --global user.name "Dax T. Games"
+|s
+gcm "Add Copilot"
+git push -u origin/main
+git push -u origin/master
+|co dev
+git push -u origin/dev
+git push -u origin dev
+|co master
+|it push -u origin master
+cd C:\Users\vagrant\src\yadr4win.git
+|it worktree add --checkout dev origin/dev
+git fetch --al
+|it fetch --all
+cd master\
+git fetch --all
+|it pull
+|it branch --set-upstream-to=origin/master master
+git pull
+git branch --set-upstream-to=origin/master master
+cd ../../
+rm -rf yadr4win.git\
+git clone --bare https://github.com/daxgames/yadr4win
+|d yadr4win.git\
+vim config 
+|mderr
+|im config\user_profile.sh 
+|d C:\Users\vagrant\src\
+|s
+cd yadr4win.git\
+|s
+code
+|s
+vim
+setx BROWSER "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+vim config\user_profile.sh 
+|it status
+git worktree add --checkout dev origin/dev
+git worktree add --checkout master origin/master
+| r
+bit branch
+git branch
+git worktree add --checkout master master
+git worktree add --checkout dev dev
+bcompare master dev
+|compare
+|mderr
+|compare
+cd bin
+|compare
+|s -la
+|\bcompare
+.\bcompare
+|compare
+|ir
+cd ..\..\src\yadr4win.git\
+bcompare master\ dev\
+cd master
+|it status
+|it diff
+|a
+gnb master-new
+|s
+|cm "userprofile->home"
+git push -u origin master-new
+|co master
+|s
+git diff master-new
+git worktree add --checkout ../master master-new
+git worktree add --checkout ../master-new master-new
+|compare ./ ..\master-new\
+set path=%path%;C:\Users\vagrant\cmderdev\opt\bc5\
+|compare ./ ..\master-new\
+rm C:\Users\vagrant\cmderdev\bin\bcomp*.*
+rm C:\Users\vagrant\cmderdev\bin\bcomp.exe 
+rm C:\Users\vagrant\cmderdev\bin\bcompare.exe 
+bcompare ./ ..\master-new\
+|hich bcompare
+|compare
+where bcompare
+|:\Users\vagrant\cmderdev\opt\bc5\BCompare.exe ./ ..\master-new\
+|s
+|im install.cmd
+C:\Users\vagrant\cmderdev\opt\bc5\BCompare.exe ./ ..\master-new\
+|d ../master-new/
+|s
+|im install.cmd
+|b -a
+|d ../master
+|it ls-remote
+|d ../master-new/
+|l
+|it ls-remote
+C:\Users\vagrant\cmderdev\opt\bc5\BCompare.exe ./ ..\master
+|co master
+|l
+gd dev
+|co master
+|d ../master
+cd ../master-new/
+|b
+bcompare . ..\dev\
+C:\Users\vagrant\cmderdev\opt\bc5\BCompare.exe ./ ..\dev
+|a
+gcm "add broken create_symlink function"
+|it push
+|it ls-remote 
+cd ../master
+|s
+|d
+|a
+gcm "userprofile->home"
+|it push
+cd C:\Users\vagrant\cmderdev\bin\
+curl -O https://github.com/dandavison/delta/releases/download/0.17.0/delta-0.17.0-x86_64-pc-windows-msvc.zip
+curl -LkO https://github.com/dandavison/delta/releases/download/0.17.0/delta-0.17.0-x86_64-pc-windows-msvc.zip
+unzip delta-0.17.0-x86_64-pc-windows-msvc.zip 
+mv delta-0.17.0-x86_64-pc-windows-msvc\delta.exe .\
+|s
+rm delta-0.17.0-x86_64-pc-windows-msvc.zip 
+|im C:\Users\vagrant\.yadr4win\install.cmd 
+|d ~/
+|d C:/Users/vagrant/
+|s
+|s -la
+git clone https://github.com/daxgames/yadr .yadr
+git clone https://github.com/daxgames/dotfiles .yadr
+vim .yadr\git\gitconfig 
+cd .yadr4win\
+|d
+|s
+|a
+gcm "Add delta pager"
+|it push
+git fetch 
+|it diff origin/master
+|s
+|s
+|it diff origin/master
+|it merge origin/master
+git diff origin/master
+|it push
+|s
+|s -la
+cd /d 
+|d ~/
+|d C:/Users/vagrant/
+|s
+|s -la
+ls src
+rm -rf .yadr4win
+ln -sf C:\Users\vagrant\src\yadr4win.git\master .yadr4win
+|s -la
+|d .yadr4win
+|s
+|d
+gd master-new
+|im cmder\config\user_profile.cmd 
+vim cmder\config\user_profile.cmd 
+|nstall.cmd
+vim install.
+|im install.cmd 
+|nstall.cmd
+|d ~/
+|d C:/Users/vagrant/
+|s -la
+|d .yadr4win
+|s -la
+|d
+|s
+|im git\gitconfig 
+|s
+ls list 
+rm -f list 
+|d
+|im install.cmd 
+|s
+|d
+|s
+|l
+|d
+|a
+|cm x
+|pl
+|it merge origin/master
+|it fetch origin
+gd origin/master
+git diff origin/master --
+git ls-remote
+|b -a
+git fetch
+|im install.cmd 
+|im install.cmd 
+|d
+vim C:/Users/vagrant/.yadr/git\gitconfig git\gitconfig 
+vim C:/Users/vagrant/.yadr/git\gitconfig git\gitconfig -p
+|s
+|d
+gl
+|d
+a
+|s
+|a
+gcm "update gitconfig"
+|s
+|p
+git push -u origin master
+|pl
+git merge origin/master
+git merge --rebase origin/master
+git pull --rebase origin master
+git ls-remote 
+gnb master
+|d master
+|im install.cmd 
+|d
+gd master
+gnb master-merged
+|s
+|a
+gdc master
+|c
+pwd
+|d ..
+|l
+|d .yadr4win
+|co master
+git merge master-merged 
+|it push
+|mderr
+|s
+|compare
+vim config\user_profile.cmd 
+config\user_profile.cmd
+|compare
+which bcompare
+set path
+alias bcompare
+unalias bcompare
+|compare
+ls ~/
+|s -la ~/
+|s -la C:/Users/vagrant/
+|s
+|s
+|d 
+cd C:\Users\vagrant\src\
+|s
+cd yadr4win.git\dev\
+|s
+|d
+|compare . ..\master
+|im install.cmd 
+|s
+gd install.cmd
+bcompare . ..\master
+cd 
+|d ..
+|d C:/Users/vagrant/
+|s -la  | grep .yadr4win
+ls -la  | grep .yadr4win
+cd C:\Users\vagrant\.yadr4win\
+|s
+|d
+|d ..
+|ir
+|l
+|d ~/
+|d C:/Users/vagrant/
+git clone https://github.com/daxgames/dotfiles.user .yadr.user
+|d .yadr.user\
+cd %CMDER_ROOT%/bin
+curl -LkO https://github.com/cli/cli/releases/download/v2.54.0/gh_2.54.0_windows_amd64.zip
+unzip gh_2.54.0_windows_amd64.zip
+mv bin\gh.exe ./
+rm -rf bin
+rm -f gh_2.54.0_windows_amd64.zip
+gh
+vim C:\Users\vagrant\.yadr4win\install.cmd 
+cd C:\Users\vagrant\.yadr.user\
+|d ..
+cd .yadr4win.user\
+|im install.cmd
+|d ..\.yadr4win
+|s
+|im install.cmd
+install.cmd
+where rsync --all
+where rsync -a
+where rsync /a
+where rsync
+rsync --version
+cat C:\Users\vagrant\.gitconfig.user 
+ls -la
+|s -la ~/
+|s
+git diff
+|d C:\Users\vagrant\.yadr4win
+|s
+|mderr
+|s
+|s
+ll vWSaUz2\
+rm -rf vWSaUz2\
+|s
+|d
+gco vendor\cmder_exinit
+|s
+gco master
+| r
+|it diff upstream/master
+git fetch upstream
+|it diff upstream/master
+git pull upstream/master
+git pull upstream master
+git diff upstream/master
+gco development-dax
+|b -a
+|it merge origin/fix_launcher_overwrite 
+|s
+|d
+|s
+|dc
+git fetch origin
+|s
+|c
+git merge origin/fix_launcher_overwrite 
+|s
+git unstage
+|d
+|d
+|s
+|a
+gc
+|p
+gco development
+|b -a
+gco fix_launcher_overwrite 
+|tart launcher\CmderLauncher.sln
+|d development-dax 
+|tart launcher\CmderLauncher.sln
+|d
+|d development-dax 
+gd development-dax 
+|s
+|s
+|s
+|d
+|s
+|a
+gcm "remove extra {}"
+|it push
+|s
+|s
+clink udate
+clink update
+|s
+|s
+gb -a
+|co development-dax 
+gco cmder4win 
+git merge fix_launcher_overwrite 
+start launcher\CmderLauncher.sln
+|s
+|d
+|s
+|s
+gdc
+|a
+gcm sync "fix launcher overwrite"
+|s
+|s
+gcm "sync fix launcher overwrite"
+git push origin cmder4win
+|it diff -g development-dax cmder4win
+bcompare
+vim ~/.gitconfig.user
+vim C:/Users/vagrant/.gitconfig.user C:\Users\vagrant\.gitconfig -p
+|d ~/.yadr
+cd C:\Users\vagrant\.yadr4win
+|s
+vim git\gitconfig 
+popd
+cmderr
+vim  C:\Users\vagrant\.gitconfig
+|im  C:\Users\vagrant\.gitconfig.user
+git diff -g development-dax cmder4win
+%CMDER_ROOT%\opt\bc5\bcomp
+|im  C:\Users\vagrant\.gitconfig.user
+hs
+|it diff -g development-dax
+vim  C:\Users\vagrant\.gitconfig.user
+git config -l
+|it diff -g development-dax
+C:\Users\vagrant\cmderdev\opt\bc5\bcomp.exe
+C:\Users\vagrant\cmderdev\opt\bc5\bcompare
+git config --global difftool.prompt false
+git config --global mergetool.keepBackup false
+vim  C:\Users\vagrant\.gitconfig.user ~/.gitconfig
+vim  C:\Users\vagrant\.gitconfig.user ~/.gitconfig -p
+git diff -g development-dax
+git diff development-dax
+git diff development-dax 
+gco development-dax 
+it merge cmder4win
+|it merge cmder4win
+|s
+|s
+|a
+|cm x
+git merge cmder4win
+|d cmder4win -- launcher\
+|im launcher\src\CmderLauncher.cpp 
+|d cmder4win -- launcher\
+vim launcher\src\CmderLauncher.cpp 
+gd cmder4win -- launcher\
+gd development -- launcher\
+|s
+|a
+|cm x
+|it push
+|s
+|l
+|s
+|s
+|s
+git fetchupstream
+git fetchu pstream
+git diff upstream/development 
+|s
+cd ~/.yadr4win
+|d C:/Users/vagrant/.yadr4win
+|l
+|b
+gp
+gco dev
+gd main
+gd master 
+cd ../dev
+|d ..
+|l
+cd src\yadr4win.git\dev\
+BComp ..\master\
+BComp ..\master\ ./
+|im test.cmd
+test.
+|est.cmd
+|im test.cmd
+|est.cmd
+|im test.cmd
+|est.cmd
+|im test.cmd
+|est.cmd
+|im test.cmd
+|est.cmd
+|im test.cmd
+test.cmd
+vim test.cmd
+|s
+:q
+test.exe 
+|s
+cd C:\Users\vagrant\.yadr4win
+|s
+|d C:\Users\vagrant\src\yadr4win.git\dev\
+|est.cmd 
+|est.cmd 
+|est.cmd 
+test.cmd 
+dir ~/
+|ir C:\Users\vagrant\
+|est
+|est
+dir C:\Users\vagrant\.vimrc
+dir C:\Users\vagrant\.vimrc.after
+dir C:\Users\vagrant\.gitconfig
+ll C:\Users\vagrant\.gitconfig
+|ir
+|ir C:\Users\vagrant\
+ln -sf C:\Users\vagrant\.yadr4win\git\gitconfig C:\Users\vagrant\.gitconfig
+|est
+ln -sf C:\Users\vagrant\.yadr4win\vimrc C:\Users\vagrant\.vimrc
+|est
+|/install
+|nstall
+test
+|ir
+dir C:\Users\vagrant\
+|s
+|d
+git status
+|nstall
+vim install.cmd
+|s
+gd .gitattributes
+vim .gitattributes 
+|a
+|s
+gcm "use native symlinks"
+vim install.cmd cmder\config\user_profile.* -p
+|im install.cmd cmder\config\user_profile.cmd cmder\config\user_profile.ps1 cmder\config\user_profile.sh -p
+|s
+|a
+gcm x 
+|p
+|/install
+cmderr
+|s
+ls -la config\
+|s
+|d C:\Users\vagrant\.yadr4win.user\
+|s
+|d
+|cm x
+|s
+|a
+|cm x
+|pl
+git pull --rebase origin main
+|p
+|l
+|s
+|s
+|s
+cd ..\.yadr4win
+|s
+|d
+|a
+|cm x
+|d C:\Users\vagrant\src\yadr4win.git\dev\
+|s
+|d
+|a
+gcm a
+|psh
+|p
+cd ../master/
+|p
+|d C:\Users\vagrant\.yadr4win.user\
+|s
+|pl
+|s
+gp
+|l
+|s -la ~/
+ls ~/ | grep 2024
+|d ..
+|ir
+ln -sf %cmder_root%\config\.ssh ~/.ssh
+|n -sf %cmder_root%\config\.ssh %user_profile%\.ssh
+mklink
+mklink /D %userprofile%\.ssh %CMDER_ROOT%\config\.ssh
+fir
+|ir
+ls .ssh
+cd .sh
+cd .ssh
+|s
+mv authorized_keysd authorized_keys
+|d ..
+ln -sf %cmder_root%\config\.ssh %user_profile%\.ssh
+ln -sf %cmder_root%/config/.ssh C:/Users/vagrant/.ssh
+|l .ssh
+rm .ssh
+|l .ssh
+ln -sf %cmder_root%/config/.ssh %userprofile%/.ssh
+|l .ssh
+dir
+cd C:/Users/vagrant/.yadr4win
+|s
+|s
+|it push
+|im install.cmd cmder\config\user_profile.cmd cmder\config\user_profile.ps1 cmder\config\user_profile.sh -p
+gb
+cd C:\Users\vagrant\src\yadr4win.git\dev\
+vim install.cmd cmder\config\user_profile.cmd cmder\config\user_profile.ps1 cmder\config\user_profile.sh -p
+|s
+ls -la ~/
+./install
+install
+ls -la C:/Users/vagrant/
+ls -la C:/Users/vagrant/ | grep yadr4win
+ls -la C:\Users\vagrant\cmderdev\config\ | grep yadr4win
+|s
+cat test.cmd 
+|a
+|cm x
+|psh
+|it push
+;s
+|s
+cd C:\Users\vagrant\.yadr4win.user\
+g r
+gpl
+|psh
+|l
+|sh vagrant@192.168.4.135
+ssh-keygen
+|l .ssh
+|d ~/
+|l .ssh
+|d ~/
+|d C:/Users/vagrant/
+|l .ssh
+ll .ssh/
+|at .ssh\id_ed25519.pub 
+ssh vagrant@192.168.4.135
+|sh vagrant@192.168.4.135 -i C:\Users\vagrant\.ssh\id_ed25519
+ssh -h
+|l
+cat .ssh\id_ed25519.pub 
+cp .ssh\id_ed25519.pub  C:\Users\vagrant\
+|s
+cp id_ed25519.pub \\vboxsvr\vagrant
+ls \\vboxsvr\vagrant
+|l
+ll .ssh
+ssh vagrant@192.168.4.135 -i C:\Users\vagrant\.ssh\id_ed25519
+cd .yadr.user\
+cd yadr4win
+|d .yadr4win
+|l
+|im install.cmd 
+|s
+|d
+|s
+cd ..
+|l
+cd .yadr4win
+|s
+|s
+gd git\
+gco git
+|s
+|d
+|s
+rm vim\.vimrc.after 
+|l
+|s
+ll ~/
+|s
+ll git
+|l
+mv install_tmux.sh cmder\bin\
+|l
+mv user_aliases.* cmder\config\
+|l
+|l
+ll cmder
+|s
+mv cmder\config\user_aliases.* ./
+mv cmder/config/user_aliases.* ./
+|s
+|a
+|s
+gcm updates
+|s
+vim install.cmd 
+gs
+gd
+ga
+gcm x
+gpsh
+git push
+set temp
+cd C:\Users\vagrant\src\dotfiles
+cd ~/src
+|l
+cd ~/
+cd C:/Users/vagrant/
+cd src\
+|s
+git clone https://github.com/daxgames/dotfiles
+which ruby
+cd ~/.yadr
+cd C:/Users/vagrant/.yadr
+fzf
+cat vendor\bin\
+|at vendor\init.bat 
+|at vendor\init.bat 
+alias cat=bat
+|at vendor\init.bat 
+alias cat
+|at vendor\init.bat 
+|at -h
+alias cat=bat.exe
+cat -h
+|at vendor\init.bat 
+which cat
+where cat
+|l
+|a
+bat vendor\init.bat 
+|at vendor\init.bat 
+va
+|at vendor\init.bat 
+alias /r
+alias /reload
+cat vendor\init.bat 
+ll config
+cd ~/.yadr.user
+cd C:/Users/vagrant/.yadr.user
+cd C:/Users/vagrant/.yadr4win.user
+|l
+cd personal-win\
+ls
+|l
+|l
+mkdir cmderdev
+cp -R C:\Users\vagrant\cmderdev\config\ ./cmderdev
+cp -R C:\Users\vagrant\cmderdev\config\ .\cmderdev
+ll

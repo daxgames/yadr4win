@@ -1,0 +1,24 @@
+# set -g default-command "which reattach-to-user-namespace > /dev/null 2>&1 && reattach-to-user-namespace -l $SHELL || $SHELL -l"
+
+# List of plugins
+set -g @plugin 'tmux-plugins/tpm'
+
+set -g @tpm_plugins '           \
+   tmux-plugins/tpm             \
+   tmux-plugins/tmux-yank   \
+   tmux-plugins/tmux-resurrect  \
+   tmux-plugins/tmux-cpu \
+'
+
+# # make scrolling with wheels work
+bind -n WheelUpPane if-shell -F -t = "#{mouse_any_flag}" "send-keys -M" "if -Ft= '#{pane_in_mode}' 'send-keys -M' 'select-pane -t=; copy-mode -e; send-keys -M'"
+bind -n WheelDownPane select-pane -t= \; send-keys -M
+
+run '~/.tmux/plugins/tpm/tpm'
+
+# Create splits and vertical splits
+bind-key v split-window -h -c '#{pane_current_path}'
+bind-key s split-window -v -c '#{pane_current_path}'
+
+# Override lfilho Choose Tree key binding.
+bind-key -T prefix S choose-tree -Zs

@@ -46,10 +46,10 @@ if ($myWindowsPrincipal.IsInRole($adminRole))
         {
             choco install $package  -y
         }
-	else
-	{
-	    choco upgrade $package -y
-	}
+        else
+        {
+            choco upgrade $package -y
+        }
     }
 }
 else

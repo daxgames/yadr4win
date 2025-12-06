@@ -1,19 +1,19 @@
 new-alias ssh $env:cmder_root\vendor\git-for-windows\usr\bin\ssh.exe -erroraction silentlycontinue
 
-function cmderr {
+function cmderr() {
   cd $ENV:CMDER_ROOT
 }
 
-function va {
-  vi "$ENV:CMDER_ROOT\config\user_aliases.ps1"
+function ae() {
+  vim "$ENV:CMDER_ROOT\config\user_aliases.ps1"
 }
 
-function gs {
+function gs() {
   git status
 }
 
-function gi(){
-  vi .gitignore
+function gie(){
+  vim .gitignore
 }
 
 function ga($git_args) {

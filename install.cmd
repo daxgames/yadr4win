@@ -1,7 +1,7 @@
 @echo off
 
 setlocal enabledelayedexpansion
-set debug=1 ::This slows things down a lot if set to greater than 0
+set debug=0 ::This slows things down a lot if set to greater than 0
 if exist "%cmder_root%\vendor\git-for-windows" (
   set cmder_full=1
 )
@@ -242,7 +242,7 @@ echo.
 echo All files that were not linked to .yadr4win files were backed up with a "[FILENAME].%BAK_EXT%".
 echo.
 echo If you are sure you have not lost anything you can clean these up by typing the following:
-echo   "%userprofile%\.yadr4win\cleanup.cmd"
+echo   "%USERPROFILE%\.yadr4win\cleanup.cmd"
 
 echo.
 echo Verifying...
@@ -296,7 +296,7 @@ exit /b
 
 :is_symlink
   set symlink=%~1
-   set symlink_target=%~2
+  set symlink_target=%~2
 
   echo.
   echo Checking for "!symlink_target!" in symlink "!symlink!"...
@@ -305,6 +305,21 @@ exit /b
   set "is_symlink=%exit_code%"
   REM call :debug_echo %is_symlink%:%symlink%
   call :debug_echo !is_symlink! "%symlink%"
+  exit /b
+
+:create_symlink
+  if "%~1" == "/d" (
+    set mklink_args=%~1\
+    set mklink_source=%~2
+    set mklink_dest=%~3
+  ) else (
+    set mklink_source=%~1
+    set mklink_dest=%~2
+  )
+
+  if exist "%mklink_dest%" ( del /y "%mklink_dest%" )
+  
+  mklink %mklink_args% "%mklink_dest%" "%mklink_source%"
   exit /b
 
 :is_hardlink

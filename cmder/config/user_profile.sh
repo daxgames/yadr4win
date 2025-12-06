@@ -7,3 +7,5 @@
 # . "${CMDER_ROOT}/vendor/lib/start-ssh-agent.sh"export MSYS=winsymlinks:nativestict
 
 export PATH=$GIT_INSTALL_ROOT/usr/bin:$GIT_INSTALL_ROOT/mingw64/bin:$PATH
+
+. $CMDER_ROOT/config/user_aliases.sh

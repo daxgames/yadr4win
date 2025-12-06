@@ -171,4 +171,4 @@ vimdiff=vim -d $*
 windowsterminal=D:\Users\296951\cmderdev\vendor\windows-terminal\windowsterminal.exe
 cat=bat.exe $*
 np+="C:\Program Files\Notepad++\notepad++.exe" $*
-diff=delta
+diff=delta $*

@@ -36,3 +36,5 @@ new-alias sublime_text '$env:cmder_root\vendor\sublime_text_3\sublime_text' -err
 new-alias sublime_text '"$env:cmder_root\vendor\sublime_text_3\sublime_text"' -erroraction silentlycontinue
 new-alias atom '"$env:cmder_root\vendor\atom\Atom\atom"' -erroraction silentlycontinue
 new-alias apm '"$env:cmder_root\vendor\atom\Atom\resources\app\apm\bin\apm"' -erroraction silentlycontinue
+new-alias cat 'bat' -erroraction silentlycontinue
+new-alias diff 'delta' -erroraction silentlycontinue

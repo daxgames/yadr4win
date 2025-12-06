@@ -133,3 +133,5 @@ function myrepos() {
 }
 
 alias repos='myrepos $*'
+alias cat='bat'
+alias diff='delta'

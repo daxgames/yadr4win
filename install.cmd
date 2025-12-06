@@ -137,9 +137,8 @@ if defined PROFILE_CMD_PATH (
     call :do_backup "!PROFILE_CMD_PATH!" !BAK_EXT!
     mklink "!PROFILE_CMD_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.cmd"
   ) else (
-    echo -^> !PROFILE_CMD_PATH! is already hard linked, nothing done.
+    echo -^> !PROFILE_CMD_PATH! is already symlinked, nothing done.
   )
-
 ) else (
   echo PROFILE_CMD_PATH not defined.
 )
@@ -156,6 +155,7 @@ if defined ALIASES_CMD_PATH (
 ) else (
   echo ALIASES_CMD_PATH not defined.
 )
+pause
 
 if defined PROFILE_SH_PATH (
   call :is_symlink "!PROFILE_SH_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.sh"

@@ -9,3 +9,5 @@
 export PATH=$GIT_INSTALL_ROOT/usr/bin:$GIT_INSTALL_ROOT/mingw64/bin:$PATH
 
 . $CMDER_ROOT/config/user_aliases.sh
+
+export BAT_CONFIG_PATH=$HOME/.config/bat/config

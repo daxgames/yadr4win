@@ -132,11 +132,10 @@ if defined CMDER_ROOT (
 )
 
 if defined PROFILE_CMD_PATH (
-  call :is_hardlink "!PROFILE_CMD_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.cmd"
-  :: Need hardlink here because doskey.exe does not deal with softlinks
-  if "%is_hardlink%" == "1" (
+  call :is_symlink "!PROFILE_CMD_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.cmd"
+  if "%is_symlink%" == "1" (
     call :do_backup "!PROFILE_CMD_PATH!" !BAK_EXT!
-    fsutil hardlink create "!PROFILE_CMD_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.cmd"
+    mklink "!PROFILE_CMD_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.cmd"
   ) else (
     echo -^> !PROFILE_CMD_PATH! is already hard linked, nothing done.
   )
@@ -239,22 +238,22 @@ if not exist "%USERPROFILE%\.gitconfig.user" (
 call :do_dos2unix
 
 echo.
+echo Verifying...
+set debug=1
+call :is_symlink "%USERPROFILE%\.vimrc" ".yadr4win\vimrc"
+call :is_dir_symlink "%USERPROFILE%\.vim" ".yadr4win\vim"
+call :is_symlink "%USERPROFILE%\.gitconfig" ".yadr4win\git\gitconfig"
+call :is_symlink "%USERPROFILE%\.tmux.conf" ".yadr4win\tmux\tmux.conf"
+call :is_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\cmder\user-Conemu.xml"
+call :is_hardlink "!ALIASES_CMD_PATH!" ".yadr4win\user_aliases.cmd"
+call :is_symlink "!ALIASES_PS1_PATH!" ".yadr4win\user_aliases.ps1"
+call :is_symlink "!ALIASES_SH_PATH!" ".yadr4win\user_aliases.sh"
+
+echo.
 echo All files that were not linked to .yadr4win files were backed up with a "[FILENAME].%BAK_EXT%".
 echo.
 echo If you are sure you have not lost anything you can clean these up by typing the following:
 echo   "%USERPROFILE%\.yadr4win\cleanup.cmd"
-
-echo.
-echo Verifying...
-set debug=1
-call :is_symlink "%USERPROFILE%\.vimrc" ".yadr4win\\vimrc"
-call :is_dir_symlink "%USERPROFILE%\.vim" ".yadr4win\\vim"
-call :is_symlink "%USERPROFILE%\.gitconfig" ".yadr4win\\git\\gitconfig"
-call :is_symlink "%USERPROFILE%\.tmux.conf" ".yadr4win\\tmux\\tmux.conf"
-call :is_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\\cmder\\user-Conemu.xml"
-call :is_hardlink "!ALIASES_CMD_PATH!" ".yadr4win\\user_aliases.cmd"
-call :is_symlink "!ALIASES_PS1_PATH!" ".yadr4win\\user_aliases.ps1"
-call :is_symlink "!ALIASES_SH_PATH!" ".yadr4win\\user_aliases.sh"
 
 endlocal
 exit /b
@@ -276,7 +275,7 @@ exit /b
 
   echo.
   echo Checking for "!junction!" junction...
-  dir !junction!\.. | findstr /i "junction" | findstr /i "!junction_target!" >nul
+  dir !junction!\.. | findstr /i "junction" | findstr /i "!junction_target:\=\\!" >nul
   set "is_junction=%errorlevel%"
   call :debug_echo %is_junction% "%junction%"
   exit /b
@@ -288,8 +287,8 @@ exit /b
 
   echo.
   echo Checking for "!symlink!\" directory symlink...
-  rem echo dir !symlink!\.. ^| findstr /i "symlinkd" ^| findstr /i /c:" %symlink_name% " ^| findstr /r "[!symlink_target!]"
-  dir !symlink!\.. | findstr /i "symlinkd" | findstr /i /c:" %symlink_name% " | findstr /r "[!symlink_target!]">nul
+  rem echo dir !symlink!\.. ^| findstr /i "symlinkd" ^| findstr /i /c:" %symlink_name% " ^| findstr /r "[!symlink_target:\=\\!]"
+  dir !symlink!\.. | findstr /i "symlinkd" | findstr /i /c:" %symlink_name% " | findstr /r "[!symlink_target:\=\\!]">nul
   set "is_symlink=%errorlevel%"
   call :debug_echo !is_symlink! "%symlink%"
   exit /b
@@ -300,8 +299,12 @@ exit /b
 
   echo.
   echo Checking for "!symlink_target!" in symlink "!symlink!"...
-  dir !symlink! | findstr /i "symlink" | findstr /i "!symlink_target!" >nul
+  dir !symlink! | findstr /i "symlink" | findstr /i "!symlink_target:\=\\!" >nul
   set exit_code=%errorlevel%
+  if "%exit_code%" == "1" (
+    echo !symlink! is not a symlink to !symlink_target!...
+    pause
+  )
   set "is_symlink=%exit_code%"
   REM call :debug_echo %is_symlink%:%symlink%
   call :debug_echo !is_symlink! "%symlink%"
@@ -337,7 +340,7 @@ exit /b
   echo Checking for "!hardlink!" hardlink...
   rem fsutil hardlink list "!hardlink!"
   rem echo fsutil hardlink list "!hardlink!" ^| findstr /i /c:"!hardlink_target!"
-  fsutil hardlink list "!hardlink!" | findstr /i /c:"!hardlink_target!"
+  fsutil hardlink list "!hardlink!" | findstr /i /c:"!hardlink_target:\=\\!"
   set "is_hardlink=%errorlevel%"
   call :debug_echo !is_hardlink! "%hardlink%"
   exit /b

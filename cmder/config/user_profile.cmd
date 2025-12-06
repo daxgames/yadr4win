@@ -17,5 +17,7 @@
 :: %ccall% "/customOption" "command/program"
 
 @echo off
-set MSYS=winsymlinks:nativestict
-set path=%path%;%GIT_INSTALL_ROOT%\usr\bin;%GIT_INSTALL_ROOT%\mingw64\bin
+
+set path=%GIT_INSTALL_ROOT%\usr\bin;%GIT_INSTALL_ROOT%\mingw64\bin;%path%
+
+set BAT_CONFIG_PATH=%USERPROFILE%\.config\bat\config

@@ -1,6 +1,8 @@
 @echo off
 
+REM Enable delayed expansion
 setlocal enabledelayedexpansion
+
 set debug=0 ::This slows things down a lot if set to greater than 0
 if exist "%cmder_root%\vendor\git-for-windows" (
   set cmder_full=1
@@ -85,6 +87,30 @@ if "!is_symlink!" EQU "1" (
 ) else (
   echo -^> %USERPROFILE%\.vim is already a symlink, nothing done.
 )
+
+call :is_dir_symlink "%USERPROFILE%\.config\nvim" "%USERPROFILE%\.yadr4win\nvim"
+if "!is_symlink!" EQU "1" (
+  CALL :do_backup "%USERPROFILE%\.config\nvim" !BAK_EXT!
+  mklink /d "%USERPROFILE%\.config\nvim" "%USERPROFILE%\.yadr4win\nvim"
+) else (
+  echo -^> %USERPROFILE%\.config\nvim is already a symlink, nothing done.
+)
+
+call :is_dir_symlink "%USERPROFILE%\AppData\Local\nvim" "%USERPROFILE%\.yadr4win\nvim"
+if "!is_symlink!" EQU "1" (
+  CALL :do_backup "%USERPROFILE%\AppData\Local\nvim" !BAK_EXT!
+  mklink /d "%USERPROFILE%\AppData\Local\nvim" "%USERPROFILE%\.yadr4win\nvim"
+) else (
+  echo -^> %USERPROFILE%\AppData\Local\nvim is already a symlink, nothing done.
+)
+
+if not exist "%APPDATA%/../Local/nvim-data/site/autoload/plug.vim" (
+  echo Installing 'vim-plug'...
+  curl -fLo "%APPDATA%/../Local/nvim-data/site/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+) else (
+  echo -^> vim-plug is already installed, nothing done.
+)
+pause
 
 if not exist "%USERPROFILE%\.vim\bundle" (
   echo mkdir "%USERPROFILE%\.vim\bundle"
@@ -321,7 +347,7 @@ exit /b
   )
 
   if exist "%mklink_dest%" ( del /y "%mklink_dest%" )
-  
+
   mklink %mklink_args% "%mklink_dest%" "%mklink_source%"
   exit /b
 

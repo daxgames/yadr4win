@@ -1,3 +1,5 @@
+@echo off
+
 :: use this file to run your own startup commands
 :: use in front of the command to prevent printing the command
 
@@ -16,8 +18,6 @@
 
 :: %ccall% "/customOption" "command/program"
 
-@echo off
-
-set path=%GIT_INSTALL_ROOT%\usr\bin;%GIT_INSTALL_ROOT%\mingw64\bin;%path%
+set path=%GIT_INSTALL_ROOT%\usr\bin;%GIT_INSTALL_ROOT%\mingw64\bin;%path%;C:\Program Files\Microsoft VS Code
 
 set BAT_CONFIG_PATH=%USERPROFILE%\.config\bat\config

@@ -42,6 +42,6 @@ if (get-command git) {
 
 . "$Env:CMDER_ROOT\config\user_aliases.ps1" 
 
-$Env:Path = "$Env:GIT_INSTALL_ROOT\usr\bin;$Env:GIT_INSTALL_ROOT\mingw64\bin;$ENV:PATH"
+$Env:Path = "$Env:GIT_INSTALL_ROOT\usr\bin;$Env:GIT_INSTALL_ROOT\mingw64\bin;$ENV:PATH;C:\Program Files\Microsoft VS Code"
 
 $ENV:BAT_CONFIG_PATH = "$ENV:USERPROFILE\.config\bat\config"

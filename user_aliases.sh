@@ -126,7 +126,6 @@ alias atom='"$cmder_root/vendor/atom/Atom/atom"'
 alias apm='"$cmder_root/vendor/atom/Atom/resources/app/apm/bin/apm"'
 alias sci='svn ci -m "$*"'
 alias whome='cd "$USERPROFILE"'
-alias code='$USERPROFILE/cmderdev/bin/vscode/code.exe'
 
 function myrepos() {
   cd "$USERPROFILE/repos/$*"

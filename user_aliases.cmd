@@ -13,7 +13,6 @@ atom="%CMDER_ROOT%\vendor\atom\Atom\atom $*"
 clear=cls
 cmderr=cd %cmder_root%
 cmderr=cd /d "%CMDER_ROOT%"
-code="%CMDER_ROOT%\bin\vscode\code.exe" 2 $G null 
 e.=explorer .
 g=git $*
 ga=git add -A $*

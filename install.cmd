@@ -131,16 +131,20 @@ if defined CMDER_ROOT (
   echo CMDER was found, configuring it if necessary...
   call :is_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\cmder\user-Conemu.xml"
   if "!is_symlink!" EQU "1" (
-    echo here
     CALL :do_backup "%CMDER_ROOT%\config\user-ConEmu.xml" !BAK_EXT!
     mklink "%CMDER_ROOT%\config\user-ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\user-ConEmu.xml"
   ) else (
     echo -^> %CMDER_ROOT%\config\user-ConEmu.xml is already symlinked, nothing done.
   )
 
-  echo Updating Cmder 'conemu.xml' with our version...
-  CALL :do_backup "%CMDER_ROOT%\vendor\conemu-maximus5\ConEmu.xml" !BAK_EXT!
-  cp  "%CMDER_ROOT%\config\user-ConEmu.xml" "%CMDER_ROOT%\vendor\conemu-maximus5\ConEmu.xml"
+  call :is_symlink "%CMDER_ROOT%\vendor\conemu-maximus5\ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\config\user-Conemu.xml"
+  if "!is_symlink!" EQU "1"
+    echo Updating Cmder 'conemu.xml' with our version...
+    CALL :do_backup "%CMDER_ROOT%\vendor\conemu-maximus5\ConEmu.xml" !BAK_EXT!
+    mklink "%CMDER_ROOT%\vendor\conemu-maximus5\ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\config\user-Conemu.xml"
+  ) else (
+    echo -^> %CMDER_ROOT%\vendor\conemu-maximus5\ConEmu.xml is already symlinked, nothing done.
+  )
 
   set ALIASES_CMD_PATH=%CMDER_ROOT%\config\user_aliases.cmd
   set PROFILE_CMD_PATH=%CMDER_ROOT%\config\user_profile.cmd

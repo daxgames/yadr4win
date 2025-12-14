@@ -76,20 +76,9 @@ echo =-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 echo Initializing pacman...
 echo =-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 mkdir -p /var/lib/pacman
-ln -s `which gettext` /usr/bin/
+ln -sf "`which gettext`" /usr/bin/
 pacman-key --init
 pacman-key --populate msys2
-# if [[ ! -f /usr/bin/gettext.sh ]] || [[ ! -f /usr/bin/gettext.exe ]]; then
-#   if [[ "${HOSTTYPE}" == "i686" ]] ; then
-#     cp /mingw32/bin/gettext.sh /usr/bin/gettext.sh
-#     cp /mingw32/bin/gettext.exe /usr/bin/gettext.exe
-# 
-#   else
-#     cp /mingw64/bin/gettext.sh /usr/bin/gettext.sh
-#     cp /mingw64/bin/gettext.exe /usr/bin/gettext.exe
-#   fi
-# fi
-# pacman-db-upgrade -d /var/lib/pacman
 pacman -Syu --noconfirm
 
 echo -e "\n=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"
@@ -102,7 +91,8 @@ t=`grep -E 'mingw-w64-[ix_0-9]+-git ' /etc/package-versions.txt`
 echo "Getting commit ID that matches '$t' from github pacman-for-git..."
 t=`curl -sLk ${bin_source}/version-tags.txt|grep "$t"`
 
-[[ "$t" == "" ]] && echo "ERROR: Commit ID not logged in github pacman-for-git." && read
+echo -e "Using commit ID: '${t##* }'"
+[[ "$t" == "" ]] && echo "ERROR: Commit ID not logged in github pacman-for-git." && exit 1
 echo -e "Using commit ID: ${t##* }"
 
 echo -e "\n=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"

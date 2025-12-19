@@ -163,7 +163,7 @@ if defined CMDER_ROOT (
 
 if defined PROFILE_CMD_PATH (
   call :is_symlink "!PROFILE_CMD_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.cmd"
-  if "%is_symlink%" == "1" (
+  if "!is_symlink!" == "1" (
     call :do_backup "!PROFILE_CMD_PATH!" !BAK_EXT!
     mklink "!PROFILE_CMD_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.cmd"
   ) else (
@@ -176,7 +176,7 @@ if defined PROFILE_CMD_PATH (
 if defined ALIASES_CMD_PATH (
   call :is_hardlink "!ALIASES_CMD_PATH!" "%USERPROFILE%\.yadr4win\user_aliases.cmd"
   :: Need hardlink here because doskey.exe does not deal with softlinks
-  if "%is_hardlink%" == "1" (
+  if "!is_hardlink!" == "1" (
     call :do_backup "!ALIASES_CMD_PATH!" !BAK_EXT!
     fsutil hardlink create "!ALIASES_CMD_PATH!" "%USERPROFILE%\.yadr4win\user_aliases.cmd"
   ) else (
@@ -189,7 +189,7 @@ pause
 
 if defined PROFILE_SH_PATH (
   call :is_symlink "!PROFILE_SH_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.sh"
-  if "%is_symlink%" == "1" (
+  if "!is_symlink!" == "1" (
     call :do_backup "!PROFILE_SH_PATH!" !BAK_EXT!
     mklink "!PROFILE_SH_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.sh"
   ) else (
@@ -201,7 +201,7 @@ if defined PROFILE_SH_PATH (
 
 if defined ALIASES_SH_PATH (
   call :is_symlink "!ALIASES_SH_PATH!" "%USERPROFILE%\.yadr4win\user_aliases.sh"
-  if "%is_symlink%" == "1" (
+  if "!is_symlink!" == "1" (
     CALL :do_backup "!ALIASES_SH_PATH!" !BAK_EXT!
     mklink "!ALIASES_SH_PATH!" "%USERPROFILE%\.yadr4win\user_aliases.sh"
   ) else (
@@ -213,7 +213,7 @@ if defined ALIASES_SH_PATH (
 
 if defined PROFILE_PS1_PATH (
   call :is_symlink "!PROFILE_PS1_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.ps1"
-  if "%is_symlink%" == "1" (
+  if "!is_symlink!" == "1" (
     call :do_backup "!PROFILE_PS1_PATH!" !BAK_EXT!
     mklink "!PROFILE_PS1_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.ps1"
   ) else (
@@ -225,7 +225,7 @@ if defined PROFILE_PS1_PATH (
 
 if defined ALIASES_PS1_PATH (
   call :is_symlink "!ALIASES_PS1_PATH!" "%USERPROFILE%\.yadr4win\user_aliases.ps1"
-  if "%is_symlink%" == "1" (
+  if "!is_symlink!" == "1" (
     call :do_backup "!ALIASES_PS1_PATH!" !BAK_EXT!
     mklink "!ALIASES_PS1_PATH!" "%USERPROFILE%\.yadr4win\user_aliases.ps1"
   ) else (
@@ -368,11 +368,12 @@ exit /b
 
   echo.
   echo Checking for "!hardlink!" hardlink...
-  rem fsutil hardlink list "!hardlink!"
-  rem echo fsutil hardlink list "!hardlink!" ^| findstr /i /c:"!hardlink_target!"
+  fsutil hardlink list "!hardlink!"
+  echo fsutil hardlink list "!hardlink!" ^| findstr /i /c:"!hardlink_target!"
   fsutil hardlink list "!hardlink!" | findstr /i /c:"!hardlink_target:\=\\!"
   set "is_hardlink=%errorlevel%"
   call :debug_echo !is_hardlink! "%hardlink%"
+  set is_hardlink
   exit /b
 
 :debug_run

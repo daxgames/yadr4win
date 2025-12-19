@@ -87,7 +87,7 @@ mkdir -p /var/lib/pacman
 ln -sf "$(which gettext)" /usr/bin/
 pacman-key --init
 pacman-key --populate msys2
-pacman -Syu --noconfirm
+pacman -Syu --noconfirm --disable-download-timeout
 echo -e "\n=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"
 
 echo =-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

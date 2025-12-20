@@ -89,7 +89,8 @@ echo.
 if defined CMDER_ROOT (
   echo CMDER was found, configuring it...
 
-  call :install_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\user-Conemu.xml"
+  call :install_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\config\user-Conemu.xml"
+  pause
   call :install_hardlink "%CMDER_ROOT%\config\user_aliases.cmd" "%USERPROFILE%\.yadr4win\user_aliases.cmd"
   call :install_symlink "%CMDER_ROOT%\config\user_profile.cmd" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.cmd"
   call :install_symlink "%CMDER_ROOT%\config\user_aliases.sh" "%USERPROFILE%\.yadr4win\user_aliases.sh"
@@ -134,9 +135,9 @@ echo   "%USERPROFILE%\.yadr4win\cleanup.cmd"
 endlocal
 exit /b
 
-:: =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 
+:: =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 :: Functions below here
-:: =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 
+:: =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 :do_backup
   set SOURCE_FILE=%~1

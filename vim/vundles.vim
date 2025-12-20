@@ -26,7 +26,6 @@ runtime vim-improvements.vundle
 " Bundle "skwp/vim-colors-solarized"
 " Bundle "itchyny/lightline.vim"
 " Bundle "godlygeek/tabular"
-" Bundle "sjl/gundo.vim"
 " Bundle "skwp/YankRing.vim"
 " Bundle "PProvost/vim-ps1"
 " Bundle "nanotech/jellybeans.vim"

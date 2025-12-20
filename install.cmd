@@ -1,6 +1,6 @@
 @echo off
 
-REM Enable delayed expansion
+:: Enable delayed expansion
 setlocal enabledelayedexpansion
 
 set debug=0 ::This slows things down a lot if set to greater than 0
@@ -56,61 +56,12 @@ else
   call :debug_echo "%is_dev_mode%" "You are running as Admin or Developer Mode is enabled!"
 )
 
-call :is_symlink "%USERPROFILE%\.vimrc" ".yadr4win\vimrc"
-if "%is_symlink%" EQU "1" (
-  call :do_backup "%USERPROFILE%\.vimrc" !BAK_EXT!
-  mklink "%USERPROFILE%\.vimrc" "%USERPROFILE%\.yadr4win\vimrc"
-) else (
-  echo -^> %USERPROFILE%\.vimrc is already symlinked, nothing done.
-)
-
-call :is_symlink "%USERPROFILE%\.gitconfig" ".yadr4win\git\gitconfig"
-if "%is_symlink%" EQU "1" (
-  call :do_backup "%USERPROFILE%\.gitconfig" !BAK_EXT!
-  mklink "%USERPROFILE%\.gitconfig" "%USERPROFILE%\.yadr4win\git\gitconfig"
-) else (
-  echo -^> %USERPROFILE%\.gitconfig is already symlinked, nothing done.
-)
-
-call :is_symlink "%USERPROFILE%\.tmux.conf" ".yadr4win\tmux\tmux.conf"
-if "%is_symlink%" EQU "1" (
-  CALL :do_backup "%USERPROFILE%\.tmux.conf" !BAK_EXT!
-  mklink "%USERPROFILE%\.tmux.conf" "%USERPROFILE%\.yadr4win\tmux\tmux.conf"
-) else (
-  echo -^> %USERPROFILE%\.tmux.conf is already symlinked, nothing done.
-)
-
-call :is_dir_symlink "%USERPROFILE%\.vim" "%USERPROFILE:\=\\%\\.yadr4win\\vim"
-if "!is_symlink!" EQU "1" (
-  CALL :do_backup "%USERPROFILE%\.vim" !BAK_EXT!
-  mklink /d "%USERPROFILE%\.vim" "%USERPROFILE%\.yadr4win\vim"
-) else (
-  echo -^> %USERPROFILE%\.vim is already a symlink, nothing done.
-)
-
-call :is_dir_symlink "%USERPROFILE%\.config\nvim" "%USERPROFILE%\.yadr4win\nvim"
-if "!is_symlink!" EQU "1" (
-  CALL :do_backup "%USERPROFILE%\.config\nvim" !BAK_EXT!
-  mklink /d "%USERPROFILE%\.config\nvim" "%USERPROFILE%\.yadr4win\nvim"
-) else (
-  echo -^> %USERPROFILE%\.config\nvim is already a symlink, nothing done.
-)
-
-call :is_dir_symlink "%USERPROFILE%\AppData\Local\nvim" "%USERPROFILE%\.yadr4win\nvim"
-if "!is_symlink!" EQU "1" (
-  CALL :do_backup "%USERPROFILE%\AppData\Local\nvim" !BAK_EXT!
-  mklink /d "%USERPROFILE%\AppData\Local\nvim" "%USERPROFILE%\.yadr4win\nvim"
-) else (
-  echo -^> %USERPROFILE%\AppData\Local\nvim is already a symlink, nothing done.
-)
-
 if not exist "%APPDATA%/../Local/nvim-data/site/autoload/plug.vim" (
   echo Installing 'vim-plug'...
   curl -fLo "%APPDATA%/../Local/nvim-data/site/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ) else (
   echo -^> vim-plug is already installed, nothing done.
 )
-pause
 
 if not exist "%USERPROFILE%\.vim\bundle" (
   echo mkdir "%USERPROFILE%\.vim\bundle"
@@ -126,124 +77,31 @@ if not exist "%USERPROFILE%\.vim\bundle\Vundle.vim" (
   echo -^> %USERPROFILE%\.vim\bundle\Vundle.vim is already installed, nothing done.
 )
 
+call :install_symlinks git
+call :install_symlinks tmux
+call :install_symlinks vimrc
+call :install_symlinks vimify
+call :install_symlink_dir "%USERPROFILE%\.vim" "%USERPROFILE%\.yadr4win\vim"
+call :install_symlink_dir "%USERPROFILE%\.config\nvim" "%USERPROFILE%\.yadr4win\nvim"
+call :install_symlink_dir "%USERPROFILE%\AppData\Local\nvim" "%USERPROFILE%\.yadr4win\nvim"
+
 echo.
 if defined CMDER_ROOT (
-  echo CMDER was found, configuring it if necessary...
-  call :is_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\cmder\user-Conemu.xml"
-  if "!is_symlink!" EQU "1" (
-    CALL :do_backup "%CMDER_ROOT%\config\user-ConEmu.xml" !BAK_EXT!
-    mklink "%CMDER_ROOT%\config\user-ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\user-ConEmu.xml"
-  ) else (
-    echo -^> %CMDER_ROOT%\config\user-ConEmu.xml is already symlinked, nothing done.
-  )
+  echo CMDER was found, configuring it...
 
-  REM call :is_symlink "%CMDER_ROOT%\vendor\conemu-maximus5\ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\config\user-Conemu.xml"
-  REM if "!is_symlink!" EQU "1" (
-  REM   echo Updating Cmder 'conemu.xml' with our version...
-  REM   CALL :do_backup "%CMDER_ROOT%\vendor\conemu-maximus5\ConEmu.xml" !BAK_EXT!
-  REM   mklink "%CMDER_ROOT%\vendor\conemu-maximus5\ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\config\user-Conemu.xml"
-  REM ) else (
-  REM   echo -^> %CMDER_ROOT%\vendor\conemu-maximus5\ConEmu.xml is already symlinked, nothing done.
-  REM )
-
-  set ALIASES_CMD_PATH=%CMDER_ROOT%\config\user_aliases.cmd
-  set PROFILE_CMD_PATH=%CMDER_ROOT%\config\user_profile.cmd
-  set ALIASES_SH_PATH=%CMDER_ROOT%\config\user_aliases.sh
-  set PROFILE_SH_PATH=%CMDER_ROOT%\config\user_profile.sh
-  set ALIASES_PS1_PATH=%CMDER_ROOT%\config\user_aliases.ps1
-  set PROFILE_PS1_PATH=%CMDER_ROOT%\config\user_profile.ps1
-  set ALIASES_PS1_PS_PATH=$env:CMDER_ROOT\config\user_aliases.ps1
-  set PROFILE_PS1_PS_PS_PATH=$env:CMDER_ROOT\config\user_profile.ps1
+  call :install_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" "%USERPROFILE%\.yadr4win\cmder\user-Conemu.xml"
+  call :install_hardlink "%CMDER_ROOT%\config\user_aliases.cmd" "%USERPROFILE%\.yadr4win\user_aliases.cmd"
+  call :install_symlink "%CMDER_ROOT%\config\user_profile.cmd" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.cmd"
+  call :install_symlink "%CMDER_ROOT%\config\user_aliases.sh" "%USERPROFILE%\.yadr4win\user_aliases.sh"
+  call :install_symlink "%CMDER_ROOT%\config\user_profile.sh" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.sh"
+  call :install_symlink "%CMDER_ROOT%\config\user_aliases.ps1" "%USERPROFILE%\.yadr4win\user_aliases.ps1"
+  call :install_symlink "%CMDER_ROOT%\config\user_profile.ps1" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.ps1"
+  call :check_powershell_profile "%CMDER_ROOT%\config\user_aliases.ps1" "%CMDER_ROOT%\config\user_profile.ps1"
 ) else (
-  set ALIASES_CMD_PATH=%USERPROFILE%\.user_aliases.cmd
-  set ALIASES_SH_PATH=%USERPROFILE%\.user_aliases.sh
-  set ALIASES_PS1_PATH=%USERPROFILE%\Documents\WindowsPowerShell\user_aliases.ps1
-  set PROFILE_PS1_PATH=%USERPROFILE%\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
-)
-
-if defined PROFILE_CMD_PATH (
-  call :is_symlink "!PROFILE_CMD_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.cmd"
-  if "!is_symlink!" == "1" (
-    call :do_backup "!PROFILE_CMD_PATH!" !BAK_EXT!
-    mklink "!PROFILE_CMD_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.cmd"
-  ) else (
-    echo -^> !PROFILE_CMD_PATH! is already symlinked, nothing done.
-  )
-) else (
-  echo PROFILE_CMD_PATH not defined.
-)
-
-if defined ALIASES_CMD_PATH (
-  call :is_hardlink "!ALIASES_CMD_PATH!" "%USERPROFILE%\.yadr4win\user_aliases.cmd"
-  :: Need hardlink here because doskey.exe does not deal with softlinks
-  if "!is_hardlink!" == "1" (
-    call :do_backup "!ALIASES_CMD_PATH!" !BAK_EXT!
-    fsutil hardlink create "!ALIASES_CMD_PATH!" "%USERPROFILE%\.yadr4win\user_aliases.cmd"
-  ) else (
-    echo -^> !ALIASES_CMD_PATH! is already hard linked, nothing done.
-  )
-) else (
-  echo ALIASES_CMD_PATH not defined.
-)
-pause
-
-if defined PROFILE_SH_PATH (
-  call :is_symlink "!PROFILE_SH_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.sh"
-  if "!is_symlink!" == "1" (
-    call :do_backup "!PROFILE_SH_PATH!" !BAK_EXT!
-    mklink "!PROFILE_SH_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.sh"
-  ) else (
-    echo -^> !PROFILE_SH_PATH! is already symlinked, nothing done.
-  )
-) else (
-  echo PROFILE_SH_PATH not defined.
-)
-
-if defined ALIASES_SH_PATH (
-  call :is_symlink "!ALIASES_SH_PATH!" "%USERPROFILE%\.yadr4win\user_aliases.sh"
-  if "!is_symlink!" == "1" (
-    CALL :do_backup "!ALIASES_SH_PATH!" !BAK_EXT!
-    mklink "!ALIASES_SH_PATH!" "%USERPROFILE%\.yadr4win\user_aliases.sh"
-  ) else (
-    echo -^> !ALIASES_SH_PATH! is already symlinked, nothing done.
-  )
-) else (
-  echo ALIASES_SH_PATH not defined.
-)
-
-if defined PROFILE_PS1_PATH (
-  call :is_symlink "!PROFILE_PS1_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.ps1"
-  if "!is_symlink!" == "1" (
-    call :do_backup "!PROFILE_PS1_PATH!" !BAK_EXT!
-    mklink "!PROFILE_PS1_PATH!" "%USERPROFILE%\.yadr4win\cmder\config\user_profile.ps1"
-  ) else (
-    echo -^> !PROFILE_PS1_PATH! is already symlinked, nothing done.
-  )
-) else (
-  echo PROFILE_PS1_PATH not defined.
-)
-
-if defined ALIASES_PS1_PATH (
-  call :is_symlink "!ALIASES_PS1_PATH!" "%USERPROFILE%\.yadr4win\user_aliases.ps1"
-  if "!is_symlink!" == "1" (
-    call :do_backup "!ALIASES_PS1_PATH!" !BAK_EXT!
-    mklink "!ALIASES_PS1_PATH!" "%USERPROFILE%\.yadr4win\user_aliases.ps1"
-  ) else (
-    echo -^> !ALIASES_PS1_PATH! is already symlinked, nothing done.
-  )
-) else (
-  echo ALIASES_PS1_PATH not defined.
-)
-
-echo "Checking '!ALIASES_PS1_PS_PATH!' is sourced in Powershell '!PROFILE_PS1_PATH!'..."
-rem echo type "!PROFILE_PS1_PATH!" ^| findstr /i /r /c:"^^. !ALIASES_PS1_PS_PATH:\=\\!"
-type "!PROFILE_PS1_PATH!" | findstr /i /r /c:"^. \"!ALIASES_PS1_PS_PATH:\=\\!\"">nul
-if "!ERRORLEVEL!" == "1" (
-  REM CALL :do_backup "!PROFILE_PS1_PATH!" !BAK_EXT!
-  echo "Sourcing '!ALIASES_PS1_PS_PATH!' in Powershell '!PROFILE_PS1_PATH!'"
-  echo . "!ALIASES_PS1_PS_PATH!" >> "!PROFILE_PS1_PATH!"
-) else (
-  call :debug_echo 0 "'!ALIASES_PS1_PS_PATH!' is already sourced in Powershell '!PROFILE_PS1_PATH!'."
+  call :install_hardlink "%USERPROFILE%\.user_aliases.cmd" "%USERPROFILE%\.yadr4win\user_aliases.cmd"
+  call :install_symlink "%USERPROFILE%\.user_aliases.sh" "%USERPROFILE%\.yadr4win\user_aliases.sh"
+  call :install_symlink "%USERPROFILE%\Documents\WindowsPowerShell\user_aliases.ps1" "%USERPROFILE%\.yadr4win\user_aliases.ps1"
+  call :check_powershell_profile "%USERPROFILE%\Documents\WindowsPowerShell\user_aliases.ps1" "%USERPROFILE%\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"
 )
 
 echo.
@@ -268,18 +126,6 @@ if not exist "%USERPROFILE%\.gitconfig.user" (
 call :do_dos2unix
 
 echo.
-echo Verifying...
-set debug=1
-call :is_symlink "%USERPROFILE%\.vimrc" ".yadr4win\vimrc"
-call :is_dir_symlink "%USERPROFILE%\.vim" ".yadr4win\vim"
-call :is_symlink "%USERPROFILE%\.gitconfig" ".yadr4win\git\gitconfig"
-call :is_symlink "%USERPROFILE%\.tmux.conf" ".yadr4win\tmux\tmux.conf"
-call :is_symlink "%CMDER_ROOT%\config\user-ConEmu.xml" ".yadr4win\cmder\user-Conemu.xml"
-call :is_hardlink "!ALIASES_CMD_PATH!" ".yadr4win\user_aliases.cmd"
-call :is_symlink "!ALIASES_PS1_PATH!" ".yadr4win\user_aliases.ps1"
-call :is_symlink "!ALIASES_SH_PATH!" ".yadr4win\user_aliases.sh"
-
-echo.
 echo All files that were not linked to .yadr4win files were backed up with a "[FILENAME].%BAK_EXT%".
 echo.
 echo If you are sure you have not lost anything you can clean these up by typing the following:
@@ -287,6 +133,10 @@ echo   "%USERPROFILE%\.yadr4win\cleanup.cmd"
 
 endlocal
 exit /b
+
+:: =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 
+:: Functions below here
+:: =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- 
 
 :do_backup
   set SOURCE_FILE=%~1
@@ -315,9 +165,7 @@ exit /b
   set symlink_name=%~nx1
   set symlink_target=%~2
 
-  echo.
   echo Checking for "!symlink!\" directory symlink...
-  rem echo dir !symlink!\.. ^| findstr /i "symlinkd" ^| findstr /i /c:" %symlink_name% " ^| findstr /r "[!symlink_target:\=\\!]"
   dir !symlink!\.. | findstr /i "symlinkd" | findstr /i /c:" %symlink_name% " | findstr /r "[!symlink_target:\=\\!]">nul
   set "is_symlink=%errorlevel%"
   call :debug_echo !is_symlink! "%symlink%"
@@ -329,35 +177,27 @@ exit /b
 
   echo.
   echo Checking for "!symlink_target!" in symlink "!symlink!"...
+
   dir !symlink! | findstr /i "symlink" | findstr /i "!symlink_target:\=\\!" >nul
   set exit_code=%errorlevel%
   if "%exit_code%" == "1" (
     echo !symlink! is not a symlink to !symlink_target!...
-    pause
   )
+
   set "is_symlink=%exit_code%"
-  REM call :debug_echo %is_symlink%:%symlink%
+
   call :debug_echo !is_symlink! "%symlink%"
-  exit /b
 
-:create_symlink
-  if "%~1" == "/d" (
-    set mklink_args=%~1\
-    set mklink_source=%~2
-    set mklink_dest=%~3
-  ) else (
-    set mklink_source=%~1
-    set mklink_dest=%~2
-  )
-
-  if exist "%mklink_dest%" ( del /y "%mklink_dest%" )
-
-  mklink %mklink_args% "%mklink_dest%" "%mklink_source%"
   exit /b
 
 :is_hardlink
-  set hardlink=%~1
-  set hardlink_target=%~2
+  set "hardlink=%~1"
+  set "hardlink_target=%~2"
+
+  :: Remove '[drive letter]:' from target for comparison.
+  if "%hardlink_target:~1,1%" == ":" (
+    set "hardlink_target=%hardlink_target:~2%"
+  )
 
   if not exist "%hardlink%" (
     echo.
@@ -368,12 +208,9 @@ exit /b
 
   echo.
   echo Checking for "!hardlink!" hardlink...
-  fsutil hardlink list "!hardlink!"
-  echo fsutil hardlink list "!hardlink!" ^| findstr /i /c:"!hardlink_target!"
-  fsutil hardlink list "!hardlink!" | findstr /i /c:"!hardlink_target:\=\\!"
+  fsutil hardlink list "!hardlink!" | findstr /i /c:"!hardlink_target:\=\\!" >nul
   set "is_hardlink=%errorlevel%"
   call :debug_echo !is_hardlink! "%hardlink%"
-  set is_hardlink
   exit /b
 
 :debug_run
@@ -474,4 +311,82 @@ exit /b
     echo.
     echo WARNING: dos2unix is not found!  Some things may not work in that require unix file endings.
   )
+
+  exit /b
+
+:install_hardlink
+  set "link=%~1"
+  set "link_target=%~2"
+
+  call :is_hardlink "%link%" "%link_target%"
+  if "%is_hardlink%" EQU "1" (
+      CALL :do_backup "%link%" %BAK_EXT%
+      fsutil hardlink create "%link%" "%link_target%"
+  ) else (
+      echo -^> %link% is already a hardlink, nothing done.
+  )
+
+  exit /b
+
+:install_symlink
+  set "link=%~1"
+  set "link_target=%~2"
+
+  call :is_symlink "%link%" "%link_target%"
+  if "%is_symlink%" EQU "1" (
+    CALL :do_backup "%link%" %BAK_EXT%
+    mklink "%link%" "%link_target%"
+  ) else (
+    echo -^> %link% is already a symlink, nothing done.
+  )
+
+  exit /b
+
+:install_symlink_dir
+  set "link=%~1"
+  set "link_target=%~2"
+
+  call :is_dir_symlink "%link%" "%link_target%"
+  if "!is_symlink!" EQU "1" (
+    CALL :do_backup "%link%" %BAK_EXT%
+    mklink /d "%link%" "%link_target%"
+  ) else (
+    echo -^> %link% is already a folder symlink, nothing done.
+  )
+
+  exit /b
+
+:install_symlinks
+  set "item=%WORKDIR%\%~1"
+
+  :: if %item% is a folder add a \* to loop through files
+  if exist "%item%\*" set "item=%item%\*"
+
+  :: Loop through files in the .\vimify item and create symlinks in the user's home directory
+  for %%f in ("%item%") do (
+    set filename=%%~nxf
+    if "!filename!" NEQ "README.md" (
+      set "link=%USERPROFILE%\.!filename!"
+      set "link_target=%%f"
+
+      call :install_symlink "!link!" "!link_target!"
+    )
+  )
+
+  exit /b
+
+:check_powershell_profile
+  set ALIASES_PS1_PS_PATH=%USERPROFILE%\.yadr4win\user_aliases.ps1
+  set PROFILE_PS1_PATH=%USERPROFILE%\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
+
+  echo "Checking '!ALIASES_PS1_PS_PATH!' is sourced in Powershell '!PROFILE_PS1_PATH!'..."
+  type "!PROFILE_PS1_PATH!" | findstr /i /r /c:"^. \"!ALIASES_PS1_PS_PATH:\=\\!\"">nul
+  if "!ERRORLEVEL!" == "1" (
+    CALL :do_backup "!PROFILE_PS1_PATH!" !BAK_EXT!
+    echo "Sourcing '!ALIASES_PS1_PS_PATH!' in Powershell '!PROFILE_PS1_PATH!'"
+    echo . "!ALIASES_PS1_PS_PATH!" >> "!PROFILE_PS1_PATH!"
+  ) else (
+    call :debug_echo 0 "'!ALIASES_PS1_PS_PATH!' is already sourced in Powershell '!PROFILE_PS1_PATH!'."
+  )
+
   exit /b

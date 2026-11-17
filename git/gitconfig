@@ -142,7 +142,7 @@
   reflog = "delta"
   show = "delta"
 [delta]
-  # syntax-theme = gruvbox-dark
+  syntax-theme = OneHalfDark
   navigate = true
   side-by-side = true
   line-numbers = true
@@ -152,11 +152,11 @@
   file-style = omit
   hunk-header-decoration-style = blue box
   hunk-header-file-style = red
-  hunk-header-line-number-style = "#067a00"
+  # hunk-header-line-number-style = "#067a00" # Make the Line number green.
   hunk-header-style = file line-number syntax
   dark = true
   # minus-emph-style = normal "#ffc0c0"
-  # minus-empty-line-marker-style = normal "#ffe0e0"
+  minus-empty-line-marker-style = normal "#ffe0e0"
   # minus-non-emph-style = normal "#ffe0e0"
   # minus-style = normal "#ffe0e0"
   # plus-emph-style = syntax "#a0efa0"

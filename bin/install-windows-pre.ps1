@@ -39,7 +39,7 @@ if ($myWindowsPrincipal.IsInRole($adminRole))
         Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
     }
 
-    $packages = @('ruby','neovim','bat','delta', 'fzf', 'ripgrep', 'mingw', 'nvm')
+    $packages = @('ruby','neovim','bat','delta', 'fzf', 'ripgrep', 'mingw', 'nvm', 'beyondcompare')
     foreach($package in $packages)
     {
         if (!(Get-Command $package  -ErrorAction SilentlyContinue))
